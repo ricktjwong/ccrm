@@ -1,12 +1,12 @@
 const Pool = require('pg').Pool
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt')
 
 const config = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT, 10)
+  port: parseInt(process.env.DB_PORT, 10),
 }
 
 const pool = new Pool(config)
@@ -37,17 +37,15 @@ const getUserById = (request, response) => {
 const createUser = (request, response) => {
   const { name, email, password } = request.body
   hashPassword(password)
-  .then(hash => {
-    pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, hash], (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(201).send(`User added with ID: ${results.insertId}`)
+    .then(hash => {
+      pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, hash], (error, results) => {
+        if (error) {
+          throw error
+        }
+        response.status(201).send(`User added with ID: ${results.insertId}`)
+      })
     })
-  })
-  .catch(function(err) {
-    console.err(err)
-  })
+    .catch(err => console.err(err))
 }
 
 // PUT
@@ -79,58 +77,72 @@ const deleteUser = (request, response) => {
   })
 }
 
-function hashPassword(password) {
-  return new Promise(function(resolve, reject) {
-    bcrypt.genSalt(10, function(err, salt) {
+// GET
+const findUserByEmail = (email) => {
+  return new Promise(function (resolve, reject) {
+    pool.query('SELECT * FROM users WHERE email = $1', [email])
+      .then(function (result) {
+        if (result.rows[0]) {
+          resolve(result.rows[0])
+        } else {
+          reject('no user found')
+        }
+      })
+      .catch(function (err) {
+        reject(err)
+      })
+  })
+}
+
+const authenticate = (request, response) => {
+  const data = request.body
+  return new Promise(function (resolve, reject) {
+    if (!data.email || !data.password) {
+      reject('error: email and/or password missing')
+    } else {
+      findUserByEmail(data.email)
+        .then(function (user) {
+          return verifyPassword(data.password, user)
+        })
+        .then(function (result) {
+          resolve({ isAuthorized: result.isValid, id: result.id })
+          response.status(200).send(result)
+        })
+        .catch(function (err) {
+          reject(err)
+        })
+    }
+  })
+}
+
+function hashPassword (password) {
+  return new Promise(function (resolve, reject) {
+    bcrypt.genSalt(10, function (err, salt) {
       if (err) {
-        reject(err);
-      }
-      else {
-        bcrypt.hash(password, salt, function(err, hash) {
+        reject(err)
+      } else {
+        bcrypt.hash(password, salt, function (err, hash) {
           if (err) {
-            reject(err);
+            reject(err)
+          } else {
+            resolve(hash)
           }
-          else {
-            resolve(hash);
-          }
-        });
+        })
       }
-    });
-  });
+    })
+  })
 }
 
-function validateUserData(data) {
-  return new Promise(function(resolve, reject) {
-    if (!data.password || !data.email) {
-      reject('email and/or password missing')
-    }
-    else {
-      validatePassword(data.password, 6)
-        .then(function() {
-          return validateEmail(data.email);
-        })
-        .then(function() {
-          resolve();
-        })
-        .catch(function(err) {
-          reject(err);
-        });
-    }
-  });
-}
-
-function validatePassword(password, minCharacters) {
-  return new Promise(function(resolve, reject) {
-    if (typeof (password) !== 'string') {
-      reject('password must be a string');
-    }
-    else if (password.length < minCharacters) {
-      reject('password must be at least ' + minCharacters + ' characters long');
-    }
-    else {
-      resolve();
-    }
-  });
+function verifyPassword (password, user) {
+  return new Promise(function (resolve, reject) {
+    bcrypt.compare(password, user.password, function (err, result) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve({ isValid: result, id: user.id })
+      }
+    })
+  })
 }
 
 module.exports = {
@@ -139,4 +151,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  authenticate,
 }

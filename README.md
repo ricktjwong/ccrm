@@ -35,4 +35,19 @@ export DB_HOST=localhost
 export DB_PORT=5432
 </pre>
 
+```
+# Start backend on localhost:9000
+$ source .env
+$ npm start
+```
+
 ## Client
+
+```
+# Start frontend on localhost:3000
+$ npm start
+```
+
+## Getting started
+
+Access is only granted to selected users, therefore CCRM does not have a `create` account page. However, for ease of testing, a page like that has been set up at localhost:3000/create. This will eventually be moved to an admin dashboard.

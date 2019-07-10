@@ -6,6 +6,7 @@ const dbUsers = require('../queries/users')
 router.get('/', dbUsers.getUsers)
 router.get('/:id', dbUsers.getUserById)
 router.post('/', dbUsers.createUser)
+router.post('/authenticate', dbUsers.authenticate)
 router.put('/:id', dbUsers.updateUser)
 router.delete('/:id', dbUsers.deleteUser)
 
