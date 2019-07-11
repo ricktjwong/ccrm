@@ -1,5 +1,6 @@
 {
   "extends": [
-    "@opengovsg/eslint-config-opengovsg"
+    "@opengovsg/eslint-config-opengovsg",
+    "plugin:react/recommended",
   ]
 }

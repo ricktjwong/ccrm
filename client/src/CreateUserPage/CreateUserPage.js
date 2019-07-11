@@ -54,8 +54,6 @@ class CreateUserPage extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
-    console.log(this.state)
-    console.log('A name was submitted: ' + this.state)
     this.createUser()
   }
 

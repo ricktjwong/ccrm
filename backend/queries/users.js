@@ -12,47 +12,61 @@ const config = {
 const pool = new Pool(config)
 
 // GET
-const getUsers = (request, response) => {
+const getUsers = (req, res) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
-    response.status(200).json(results.rows)
+    res.status(200).json(results.rows)
   })
 }
 
-// GET
-const getUserById = (request, response) => {
-  const id = parseInt(request.params.id)
-
-  pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
+const getUserByEmail = (req, res, next) => {
+  const data = req.body
+  if (!data.email || !data.password) {
+    let err = { status: 400, message: 'Email and/or password missing' }
+    next(err)
+  } else {
+    pool.query('SELECT * FROM users WHERE email = $1', [data.email])
+      .then(function (result) {
+        if (result.rows[0]) {
+          req.data = { password: data.password, user: result.rows[0] }
+          next()
+        } else {
+          let err = { status: 404, message: 'No user found' }
+          next(err)
+        }
+      })
+      .catch(function (error) {
+        let err = { status: error.status || 500, message: error }
+        next(err)
+      })
+  }
 }
 
 // POST
-const createUser = (request, response) => {
-  const { name, email, password } = request.body
+const createUser = (req, res, next) => {
+  const { name, email, password } = req.body
   hashPassword(password)
     .then(hash => {
       pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, hash], (error, results) => {
         if (error) {
-          throw error
+          let err = { status: error.status || 500, message: error }
+          next(err)
         }
-        response.status(201).send(`User added with ID: ${results.insertId}`)
+        res.status(201).send(`User added with ID: ${results.insertId}`)
       })
     })
-    .catch(err => console.err(err))
+    .catch((error) => {
+      let err = { status: error.status || 500, message: error }
+      next(err)
+    })
 }
 
 // PUT
-const updateUser = (request, response) => {
-  const id = parseInt(request.params.id)
-  const { name, email } = request.body
-
+const updateUser = (req, res) => {
+  const id = parseInt(req.params.id)
+  const { name, email } = req.body
   pool.query(
     'UPDATE users SET name = $1, email = $2 WHERE id = $3',
     [name, email, id],
@@ -60,61 +74,23 @@ const updateUser = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`User modified with ID: ${id}`)
+      res.status(200).send(`User modified with ID: ${id}`)
     }
   )
 }
 
 // DELETE
-const deleteUser = (request, response) => {
-  const id = parseInt(request.params.id)
-
+const deleteUser = (req, res) => {
+  const id = parseInt(req.params.id)
   pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
-    response.status(200).send(`User deleted with ID: ${id}`)
+    res.status(200).send(`User deleted with ID: ${id}`)
   })
 }
 
-// GET
-const findUserByEmail = (email) => {
-  return new Promise(function (resolve, reject) {
-    pool.query('SELECT * FROM users WHERE email = $1', [email])
-      .then(function (result) {
-        if (result.rows[0]) {
-          resolve(result.rows[0])
-        } else {
-          reject('no user found')
-        }
-      })
-      .catch(function (err) {
-        reject(err)
-      })
-  })
-}
-
-const authenticate = (request, response) => {
-  const data = request.body
-  return new Promise(function (resolve, reject) {
-    if (!data.email || !data.password) {
-      reject('error: email and/or password missing')
-    } else {
-      findUserByEmail(data.email)
-        .then(function (user) {
-          return verifyPassword(data.password, user)
-        })
-        .then(function (result) {
-          resolve({ isAuthorized: result.isValid, id: result.id })
-          response.status(200).send(result)
-        })
-        .catch(function (err) {
-          reject(err)
-        })
-    }
-  })
-}
-
+// Helper functions
 function hashPassword (password) {
   return new Promise(function (resolve, reject) {
     bcrypt.genSalt(10, function (err, salt) {
@@ -133,23 +109,22 @@ function hashPassword (password) {
   })
 }
 
-function verifyPassword (password, user) {
-  return new Promise(function (resolve, reject) {
-    bcrypt.compare(password, user.password, function (err, result) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve({ isValid: result, id: user.id })
-      }
-    })
+function verifyPassword (req, res, next) {
+  let data = req.data
+  bcrypt.compare(data.password, data.user.password, function (err, result) {
+    if (err) {
+      next(err)
+    } else {
+      res.status(200).send({ isValid: result, id: data.user.id })
+    }
   })
 }
 
 module.exports = {
   getUsers,
-  getUserById,
   createUser,
   updateUser,
   deleteUser,
-  authenticate,
+  getUserByEmail,
+  verifyPassword,
 }

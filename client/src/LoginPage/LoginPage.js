@@ -32,11 +32,11 @@ class LoginPage extends Component {
           sessionStorage.setItem('user', JSON.stringify('user'))
           this.props.history.push('/')
         } else {
-          console.log('Password wrong')
+          console.error('Error: ', res)
         }
       })
       .catch(function (err) {
-        console.log(err)
+        console.error('Login Error: ', err)
       })
   }
 
