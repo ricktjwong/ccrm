@@ -22,8 +22,6 @@ $ postgres=# \q
 
 # Create database api using the role opengov
 $ createdb api -U opengov
-# Add schema for the api database
-$ psql -U opengov api < models/schema/users.sql
 </pre>
 
 Create a .env file with the following variables:

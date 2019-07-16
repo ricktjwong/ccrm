@@ -1,3 +1,8 @@
+const db = require('./models')
+const models = db.models
+const sequelize = db.sequelize
+const hashPassword = require('./queries/users').hashPassword
+
 var express = require('express')
 const bodyParser = require('body-parser')
 var path = require('path')
@@ -9,6 +14,27 @@ var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 
 var app = express()
+
+const eraseDatabaseOnSync = true
+
+sequelize.sync({ force: eraseDatabaseOnSync }).then(() => {
+  if (eraseDatabaseOnSync) createUsers()
+  app.listen(process.env.DB_PORT, () => {
+    console.log(`Example app listening on port ${process.env.DB_PORT}!`)
+  })
+})
+
+const createUsers = async () => {
+  const password = await hashPassword(process.env.DB_PASSWORD)
+  await models.User.create({
+    name: 'admin',
+    email: 'admin@opengov.com',
+    password: password,
+    cases: [{ client_name: 'Han Solo', }]
+  }, {
+    include: models.Case
+  })
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))

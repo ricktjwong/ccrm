@@ -1,93 +1,86 @@
-const Pool = require('pg').Pool
 var bcrypt = require('bcrypt')
-
-const config = {
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT, 10),
-}
-
-const pool = new Pool(config)
+let db = require('../models')
+let models = db.models
 
 // GET
-const getUsers = (req, res) => {
-  pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(200).json(results.rows)
-  })
+const getUsers = async (req, res) => {
+  try {
+    const users = await models.User.findAll()
+    res.status(200).json(users)
+  } catch (error) {
+    let err = { status: error.status || 500, message: error }
+    next(err)
+  }
 }
 
-const getUserByEmail = (req, res, next) => {
+const getUserByEmail = async (req, res, next) => {
   const data = req.body
   if (!data.email || !data.password) {
     let err = { status: 400, message: 'Email and/or password missing' }
     next(err)
   } else {
-    pool.query('SELECT * FROM users WHERE email = $1', [data.email])
-      .then(function (result) {
-        if (result.rows[0]) {
-          req.data = { password: data.password, user: result.rows[0] }
-          next()
-        } else {
-          let err = { status: 404, message: 'No user found' }
-          next(err)
-        }
+    try {
+      let user = await models.User.findOne({
+        where: { email: data.email }
       })
-      .catch(function (error) {
-        let err = { status: error.status || 500, message: error }
+      if (user) {
+        req.data = { password: data.password, user: user }
+        next()
+      } else {
+        let err = { status: 404, message: 'No user found' }
         next(err)
-      })
+      }
+    } catch (error) {
+      let err = { status: error.status || 500, message: error }
+      next(err)
+    }
   }
 }
 
 // POST
-const createUser = (req, res, next) => {
+const createUser = async (req, res, next) => {
   const { name, email, password } = req.body
-  hashPassword(password)
-    .then(hash => {
-      pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, hash], (error, results) => {
-        if (error) {
-          let err = { status: error.status || 500, message: error }
-          next(err)
-        }
-        res.status(201).send(`User added with ID: ${results.insertId}`)
-      })
+  try {
+    const hash = await hashPassword(password)
+    const user = await models.User.create({
+      name: name,
+      email: email,
+      password: hash
     })
-    .catch((error) => {
-      let err = { status: error.status || 500, message: error }
-      next(err)
-    })
+    res.status(201).send(`User added with ID: ${user.dataValues.id}`)
+  }
+  catch (error) {
+    let err = { status: error.status || 500, message: error }
+    next(err)
+  }
 }
 
 // PUT
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
   const id = parseInt(req.params.id)
   const { name, email } = req.body
-  pool.query(
-    'UPDATE users SET name = $1, email = $2 WHERE id = $3',
-    [name, email, id],
-    (error, results) => {
-      if (error) {
-        throw error
-      }
-      res.status(200).send(`User modified with ID: ${id}`)
-    }
-  )
+  try {
+    let user = await models.User.update({ 
+      name: name,
+      email: email
+    }, { where: {id: id} })
+    res.status(200).send(`User modified with ID: ${id}`)
+  } catch(error) {
+    let err = { status: error.status || 500, message: error }
+    next(err)
+  }
 }
 
 // DELETE
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
   const id = parseInt(req.params.id)
-  pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
-    }
+  try {
+    await models.User.destroy({ where: {id: id}})
     res.status(200).send(`User deleted with ID: ${id}`)
-  })
+  } catch(error) {
+    let err = { status: error.status || 500, message: error }
+    next(err)
+  }
 }
 
 // Helper functions
@@ -127,4 +120,5 @@ module.exports = {
   deleteUser,
   getUserByEmail,
   verifyPassword,
+  hashPassword,
 }

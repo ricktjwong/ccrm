@@ -6,7 +6,7 @@ router.get('/', dbUsers.getUsers)
 router.post('/', dbUsers.createUser)
 
 router.post('/authenticate',
-  dbUsers.findUserByEmail,
+  dbUsers.getUserByEmail,
   dbUsers.verifyPassword,
 )
 
