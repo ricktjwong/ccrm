@@ -13,6 +13,17 @@ const getUsers = async (req, res) => {
   }
 }
 
+const getUserById = async (req, res) => {
+  const id = parseInt(req.params.id)
+  try {
+    let user = await models.User.findAll({ where: {id: id} })
+    res.status(200).json(user)
+  } catch (error) {
+    let err = { status: error.status || 500, message: error }
+    next(err)
+  }
+}
+
 const getUserByEmail = async (req, res, next) => {
   const data = req.body
   if (!data.email || !data.password) {
@@ -21,7 +32,7 @@ const getUserByEmail = async (req, res, next) => {
   } else {
     try {
       let user = await models.User.findOne({
-        where: { email: data.email }
+        where: { email: data.email },
       })
       if (user) {
         req.data = { password: data.password, user: user }
@@ -45,11 +56,10 @@ const createUser = async (req, res, next) => {
     const user = await models.User.create({
       name: name,
       email: email,
-      password: hash
+      password: hash,
     })
     res.status(201).send(`User added with ID: ${user.dataValues.id}`)
-  }
-  catch (error) {
+  } catch (error) {
     let err = { status: error.status || 500, message: error }
     next(err)
   }
@@ -60,12 +70,12 @@ const updateUser = async (req, res) => {
   const id = parseInt(req.params.id)
   const { name, email } = req.body
   try {
-    let user = await models.User.update({ 
+    let user = await models.User.update({
       name: name,
-      email: email
+      email: email,
     }, { where: {id: id} })
     res.status(200).send(`User modified with ID: ${id}`)
-  } catch(error) {
+  } catch (error) {
     let err = { status: error.status || 500, message: error }
     next(err)
   }
@@ -75,9 +85,9 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   const id = parseInt(req.params.id)
   try {
-    await models.User.destroy({ where: {id: id}})
+    await models.User.destroy({ where: {id: id} })
     res.status(200).send(`User deleted with ID: ${id}`)
-  } catch(error) {
+  } catch (error) {
     let err = { status: error.status || 500, message: error }
     next(err)
   }
@@ -115,6 +125,7 @@ function verifyPassword (req, res, next) {
 
 module.exports = {
   getUsers,
+  getUserById,
   createUser,
   updateUser,
   deleteUser,

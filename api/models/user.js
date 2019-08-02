@@ -1,22 +1,18 @@
 const user = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
-    name: {
-      type: DataTypes.STRING,
-    },
+    name: DataTypes.STRING,
+    password: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,
       unique: true,
     },
-    password: {
-      type: DataTypes.STRING,
-    },
-  });
-  
+  }, { underscored: true })
+
   User.associate = models => {
     User.hasMany(models.Case, { onDelete: 'CASCADE' })
   }
 
-  return User;
-};
+  return User
+}
 
-module.exports = user;
+module.exports = user

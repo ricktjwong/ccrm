@@ -5,6 +5,7 @@ import { PrivateRoute } from '../components'
 import { HomePage } from '../HomePage'
 import { LoginPage } from '../LoginPage'
 import { CreateUserPage } from '../CreateUserPage'
+import { CasesViewPage } from '../CasesViewPage/CasesViewPage'
 
 class App extends Component {
   render () {
@@ -17,6 +18,7 @@ class App extends Component {
                 <PrivateRoute exact path="/" component={HomePage} />
                 <Route path="/create" component={CreateUserPage} />
                 <Route path="/login" component={LoginPage} />
+                <Route path="/cases" component={CasesViewPage} />
               </div>
             </Router>
           </div>

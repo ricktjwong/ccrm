@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './home.css'
+import './caseview.css'
 
 class HomePage extends Component {
   constructor (props) {
@@ -13,7 +13,7 @@ class HomePage extends Component {
   }
 
   callAPI () {
-    fetch('http://localhost:9000/conversations')
+    fetch('http://localhost:9000/cases/' + id)
       .then(res => res.json())
       .then(res => this.setState({ conversations: res }))
       .catch(err => err)
@@ -21,7 +21,7 @@ class HomePage extends Component {
 
   componentDidMount () {
     this.callAPI()
-    document.title = 'Home Page'
+    document.title = 'Case View'
   }
 
   logout () {

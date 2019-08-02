@@ -1,13 +1,18 @@
-const msf_case = (sequelize, DataTypes) => {
+const msfCase = (sequelize, DataTypes) => {
   const Case = sequelize.define('case', {
-    client_name: DataTypes.STRING,
-  })
+    clientName: DataTypes.STRING,
+    caseDesc: DataTypes.STRING,
+    assignedAgency: DataTypes.STRING,
+    agencyPoc: DataTypes.STRING,
+  }, { underscored: true })
 
   Case.associate = models => {
-    Case.belongsTo(models.User);
+    Case.belongsTo(models.User)
+    Case.hasMany(models.Conversation, { onDelete: 'CASCADE' })
+    Case.hasMany(models.Actionplan, { onDelete: 'CASCADE' })
   }
 
-  return Case;
+  return Case
 }
 
-module.exports = msf_case
+module.exports = msfCase

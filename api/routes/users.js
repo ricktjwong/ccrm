@@ -3,8 +3,9 @@ var router = express.Router()
 const dbUsers = require('../queries/users')
 
 router.get('/', dbUsers.getUsers)
-router.post('/', dbUsers.createUser)
+router.get('/:id', dbUsers.getUserById)
 
+router.post('/', dbUsers.createUser)
 router.post('/authenticate',
   dbUsers.getUserByEmail,
   dbUsers.verifyPassword,

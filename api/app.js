@@ -12,27 +12,36 @@ var cors = require('cors')
 
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
+var conversationsRouter = require('./routes/conversations')
+var casesRouter = require('./routes/cases')
 
 var app = express()
 
 const eraseDatabaseOnSync = true
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(() => {
-  if (eraseDatabaseOnSync) createUsers()
+  if (eraseDatabaseOnSync) createTables()
   app.listen(process.env.DB_PORT, () => {
     console.log(`Example app listening on port ${process.env.DB_PORT}!`)
   })
 })
 
-const createUsers = async () => {
+const createTables = async () => {
   const password = await hashPassword(process.env.DB_PASSWORD)
+
   await models.User.create({
     name: 'admin',
     email: 'admin@opengov.com',
     password: password,
-    cases: [{ client_name: 'Han Solo', }]
+  })
+
+  await models.Case.create({
+    userId: 1,
+    clientName: 'Han Solo',
+    conversations: [{ message: 'Hi can you please revert', from: 'admin' },
+      { message: 'How about you just go home', from: 'admin2' }],
   }, {
-    include: models.Case
+    include: models.Conversation,
   })
 }
 
@@ -55,6 +64,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
+app.use('/conversations', conversationsRouter)
+app.use('/cases', casesRouter)
 
 // error handler
 app.use(function (err, req, res, next) {

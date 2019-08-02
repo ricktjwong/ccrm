@@ -9,17 +9,20 @@ const config = {
 }
 
 var sequelize = new Sequelize(config.database,
-                              config.user,
-                              config.password,
-                              { 
-                                dialect: 'postgres',
-                                port: config.port,
-                                host: config.host,
-                              })
+  config.user,
+  config.password,
+  {
+    dialect: 'postgres',
+    port: config.port,
+    host: config.host,
+  })
 
 const models = {
   User: sequelize.import('./user'),
   Case: sequelize.import('./case'),
+  Conversation: sequelize.import('./conversation'),
+  Client: sequelize.import('./client'),
+  Actionplan: sequelize.import('./actionplan'),
 }
 
 Object.keys(models).forEach(key => {
@@ -30,5 +33,5 @@ Object.keys(models).forEach(key => {
 
 module.exports = {
   sequelize,
-  models
+  models,
 }
