@@ -1,6 +1,7 @@
 const msfCase = (sequelize, DataTypes) => {
   const Case = sequelize.define('case', {
     clientName: DataTypes.STRING,
+    clientId: DataTypes.INTEGER,
     caseDesc: DataTypes.STRING,
     assignedAgency: DataTypes.STRING,
     agencyPoc: DataTypes.STRING,
@@ -8,6 +9,7 @@ const msfCase = (sequelize, DataTypes) => {
 
   Case.associate = models => {
     Case.belongsTo(models.User)
+    Case.hasOne(models.Client)
     Case.hasMany(models.Conversation, { onDelete: 'CASCADE' })
     Case.hasMany(models.Actionplan, { onDelete: 'CASCADE' })
   }

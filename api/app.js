@@ -38,8 +38,23 @@ const createTables = async () => {
   await models.Case.create({
     userId: 1,
     clientName: 'Han Solo',
+    caseDesc: 'Single family, requires education grant for son',
+    assignedAgency: 'MOE',
+    agencyPoc: 'chewie@moe.edu.sg',
     conversations: [{ message: 'Hi can you please revert', from: 'admin' },
       { message: 'How about you just go home', from: 'admin2' }],
+  }, {
+    include: models.Conversation,
+  })
+
+  await models.Case.create({
+    userId: 1,
+    clientName: 'Anakin Skywalker',
+    caseDesc: 'Single family, requires HDB loan for family',
+    assignedAgency: 'HDB',
+    agencyPoc: 'ewok@hdb.edu.sg',
+    conversations: [{ message: 'Why r U takINg sO lOnG to dO this???', from: 'admin' },
+      { message: 'Sorry its taking too long to talk to HDB', from: 'admin2' }],
   }, {
     include: models.Conversation,
   })

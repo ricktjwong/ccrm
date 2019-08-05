@@ -1,1 +1,1 @@
-export * from './CaseViewPage'
+export * from './CasesViewPage'

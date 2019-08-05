@@ -1,21 +1,21 @@
 import React, { Component } from 'react'
 import './caseview.css'
 
-class HomePage extends Component {
+class CaseViewPage extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      conversations: [],
+      case: [],
     }
 
-    this.logout = this.logout.bind(this)
+    this.caseId = this.props.location.state.caseId
   }
 
   callAPI () {
-    fetch('http://localhost:9000/cases/' + id)
+    fetch('http://localhost:9000/cases/' + this.caseId)
       .then(res => res.json())
-      .then(res => this.setState({ conversations: res }))
+      .then(res => this.setState({ case: res }))
       .catch(err => err)
   }
 
@@ -24,27 +24,26 @@ class HomePage extends Component {
     document.title = 'Case View'
   }
 
-  logout () {
-    sessionStorage.clear()
-    this.props.history.push('/')
-  }
-
   render () {
-    this.listItems = this.state.conversations.map((d) =>
-      <li key={d.id}> {d.message}: {d.from} | {d.createdAt}</li>
-    )
-
-    console.log(this.state.conversations)
+    if (this.state.case.length > 0) {
+      this.caseItems = this.state.case.map((x) =>
+        <li key={x.id}> {x.agencyPoc}: {x.caseDesc} | {x.createdAt}</li>
+      )
+      this.conversations = this.state.case[0].conversations.map((x, idx) =>
+        <li key={idx}> {x.message} </li>
+      )
+    }
 
     return (
-      <div className="home">
+      <div className="caseview">
         <p>Successfully logged in</p>
-        <p>Conversations:</p>
-        <p>{ this.listItems }</p>
-        <button onClick={this.logout}>Logout</button>
+        <p>Case:</p>
+        <p>{ this.caseItems }</p>
+        Conversations:
+        <p>{ this.conversations }</p>
       </div>
     )
   }
 }
 
-export { HomePage }
+export { CaseViewPage }

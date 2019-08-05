@@ -9,7 +9,7 @@ class CasesViewPage extends Component {
       cases: [],
     }
 
-    this.logout = this.logout.bind(this)
+    this.viewCase = this.viewCase.bind(this)
   }
 
   callAPI () {
@@ -25,17 +25,21 @@ class CasesViewPage extends Component {
     document.title = 'View Cases'
   }
 
-  logout () {
-    sessionStorage.clear()
-    this.props.history.push('/')
+  viewCase (caseId) {
+    console.log('caseid: ' + caseId)
+    this.props.history.push({
+      pathname: '/case',
+      state: { caseId: caseId },
+    })
   }
 
   render () {
     this.listItems = this.state.cases.map((d) =>
-      <li key={d.id}> {d.clientName} | {d.createdAt}</li>
+      <li key={d.id}> {d.clientName} | {d.caseDesc} |
+        {d.assignedAgency} - {d.agencyPoc} | {d.createdAt} |
+        <button onClick={() => this.viewCase(d.id)}>View Case</button>
+      </li>
     )
-
-    console.log(this.state.cases)
 
     return (
       <div className="cases">

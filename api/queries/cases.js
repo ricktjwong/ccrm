@@ -2,7 +2,7 @@ let db = require('../models')
 let models = db.models
 
 // GET
-const getCases = async (req, res) => {
+const getCases = async (req, res, next) => {
   try {
     const cases = await models.Case.findAll()
     res.status(200).json(cases)
@@ -12,7 +12,7 @@ const getCases = async (req, res) => {
   }
 }
 
-const getCasesByUserId = async (req, res) => {
+const getCasesByUserId = async (req, res, next) => {
   const id = parseInt(req.params.id)
   try {
     let cases = await models.Case.findAll({ where: {userId: id} })
@@ -23,11 +23,11 @@ const getCasesByUserId = async (req, res) => {
   }
 }
 
-const getCasesByCaseId = async (req, res) => {
+const getCasesByCaseId = async (req, res, next) => {
   const id = parseInt(req.params.id)
   try {
-    let cases = await models.Case.findAll({ where: {id: id} })
-    res.status(200).json(cases)
+    let msfCase = await models.Case.findAll({ include: [models.Conversation], where: {id: id} })
+    res.status(200).json(msfCase)
   } catch (error) {
     let err = { status: error.status || 500, message: error }
     next(err)
