@@ -32,6 +32,9 @@ class CaseViewPage extends Component {
       this.conversations = this.state.case[0].conversations.map((x, idx) =>
         <li key={idx}> {x.message} </li>
       )
+      this.client = Object.keys(this.state.case[0].client).map((key, idx) =>
+        <li key={idx}> {key}: {this.state.case[0].client[key]}</li>
+      )
     }
 
     return (
@@ -41,6 +44,8 @@ class CaseViewPage extends Component {
         <p>{ this.caseItems }</p>
         Conversations:
         <p>{ this.conversations }</p>
+        Client Details:
+        <p>{ this.client }</p>
       </div>
     )
   }

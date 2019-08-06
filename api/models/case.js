@@ -1,7 +1,6 @@
 const msfCase = (sequelize, DataTypes) => {
   const Case = sequelize.define('case', {
     clientName: DataTypes.STRING,
-    clientId: DataTypes.INTEGER,
     caseDesc: DataTypes.STRING,
     assignedAgency: DataTypes.STRING,
     agencyPoc: DataTypes.STRING,

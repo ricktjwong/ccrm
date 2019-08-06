@@ -41,10 +41,25 @@ const createTables = async () => {
     caseDesc: 'Single family, requires education grant for son',
     assignedAgency: 'MOE',
     agencyPoc: 'chewie@moe.edu.sg',
+    client: {
+      name: 'Han Solo',
+      dob: '12/12/1995',
+      email: 'han@solo.com',
+      nric: 'S9347193J',
+      nricAddress: '123 Tatooine Street',
+      address: '123 Tatooine Street',
+      gender: 'Male',
+      nationality: 'Jedi',
+      race: 'Jedi',
+      maritalStatus: 'Single4Lyfe',
+      employmentStatus: 'Employed',
+      grossHouseholdIncome: '100000',
+      phone: 91829381,
+    },
     conversations: [{ message: 'Hi can you please revert', from: 'admin' },
       { message: 'How about you just go home', from: 'admin2' }],
   }, {
-    include: models.Conversation,
+    include: [models.Client, models.Conversation],
   })
 
   await models.Case.create({
