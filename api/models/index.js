@@ -23,6 +23,7 @@ const models = {
   Conversation: sequelize.import('./conversation'),
   Client: sequelize.import('./client'),
   Actionplan: sequelize.import('./actionplan'),
+  Timeline: sequelize.import('timeline'),
 }
 
 Object.keys(models).forEach(key => {

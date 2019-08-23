@@ -1,4 +1,38 @@
 .home {
   text-align: center;
-  margin: 50px;
+}
+
+.home p {
+  margin: 0;
+  padding-top: 30px;
+}
+
+.nav-button {
+  background-color: white;
+  border: none;
+  color: black;
+	padding: 0;
+	font: inherit;
+}
+
+.sidebar-element {
+  list-style: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#mainContent {
+  background-color: lightgrey;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#textContent {
+  position: relative;
+  background-color: white;
+  border: 1px solid black;
+  width: 70%;
+  height: 70%;
+  margin: auto;
+  margin-top: 10%;
 }

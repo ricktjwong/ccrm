@@ -11,6 +11,7 @@ const msfCase = (sequelize, DataTypes) => {
     Case.hasOne(models.Client)
     Case.hasMany(models.Conversation, { onDelete: 'CASCADE' })
     Case.hasMany(models.Actionplan, { onDelete: 'CASCADE' })
+    Case.hasMany(models.Timeline, { onDelete: 'CASCADE' })
   }
 
   return Case

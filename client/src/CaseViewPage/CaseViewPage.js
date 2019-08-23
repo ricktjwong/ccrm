@@ -26,11 +26,15 @@ class CaseViewPage extends Component {
 
   render () {
     if (this.state.case.length > 0) {
+      console.log(this.state.case)
       this.caseItems = this.state.case.map((x) =>
         <li key={x.id}> {x.agencyPoc}: {x.caseDesc} | {x.createdAt}</li>
       )
       this.conversations = this.state.case[0].conversations.map((x, idx) =>
         <li key={idx}> {x.message} </li>
+      )
+      this.timelines = this.state.case[0].timelines.map((x, idx) =>
+        <li key={idx}> {x.subject} | {x.details} </li>
       )
       this.client = Object.keys(this.state.case[0].client).map((key, idx) =>
         <li key={idx}> {key}: {this.state.case[0].client[key]}</li>
@@ -46,6 +50,8 @@ class CaseViewPage extends Component {
         <p>{ this.conversations }</p>
         Client Details:
         <p>{ this.client }</p>
+        Timelines:
+        <p>{ this.timelines }</p>
       </div>
     )
   }

@@ -26,7 +26,12 @@ const getCasesByUserId = async (req, res, next) => {
 const getCasesByCaseId = async (req, res, next) => {
   const id = parseInt(req.params.id)
   try {
-    let msfCase = await models.Case.findAll({ include: [models.Client, models.Conversation], where: {id: id} })
+    let msfCase = await models.Case.findAll({
+      include: [models.Client,
+                models.Conversation,
+                models.Timeline],
+                where: {id: id} })
+
     res.status(200).json(msfCase)
   } catch (error) {
     let err = { status: error.status || 500, message: error }

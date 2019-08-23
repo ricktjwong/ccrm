@@ -14,6 +14,7 @@ var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var conversationsRouter = require('./routes/conversations')
 var casesRouter = require('./routes/cases')
+var timelinesRouter = require('./routes/timelines')
 
 var app = express()
 
@@ -56,10 +57,15 @@ const createTables = async () => {
       grossHouseholdIncome: '100000',
       phone: 91829381,
     },
-    conversations: [{ message: 'Hi can you please revert', from: 'admin' },
-      { message: 'How about you just go home', from: 'admin2' }],
+    conversations: [{ message: 'Hi can you please revert',
+                      from: 'admin' },
+                    { message: 'Apologies for taking so long, was on holiday',
+                      from: 'admin2' }],
+    timelines: [{ subject: 'Referral',
+                  from: 'Anakin',
+                  details: 'Case has been referred to SSO', }]
   }, {
-    include: [models.Client, models.Conversation],
+    include: [models.Client, models.Conversation, models.Timeline],
   })
 
   await models.Case.create({
@@ -96,6 +102,7 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/conversations', conversationsRouter)
 app.use('/cases', casesRouter)
+app.use('/timelines', timelinesRouter)
 
 // error handler
 app.use(function (err, req, res, next) {
