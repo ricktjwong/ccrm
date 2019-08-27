@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import './casesview.css'
+import Sidebar from 'components/Sidebar';
+import Topbar from 'components/Topbar';
 
 class CasesViewPage extends Component {
   constructor (props) {
@@ -43,8 +45,12 @@ class CasesViewPage extends Component {
 
     return (
       <div className="cases">
-        <p>Cases:</p>
-        <p>{ this.listItems }</p>
+        <Topbar />
+        <Sidebar />
+        <div className="case-content">
+          Cases:
+          <p>{ this.listItems }</p>
+        </div>
       </div>
     )
   }
