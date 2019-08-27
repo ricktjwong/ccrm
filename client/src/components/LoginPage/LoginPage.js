@@ -56,12 +56,21 @@ class LoginPage extends Component {
   render () {
     return (
       <div className="login">
-        <h1>Case Coordination and Referral Management</h1>
-        Email:
-        <input type="email" name="email" value={this.state.email} onChange={this.handleChange}/><br />
-        Password:
-        <input type="password" name="password" value={this.state.password} onChange={this.handleChange}/><br />
-        <button onClick={this.handleSubmit}>Login</button>
+
+        <div id="logo-box">
+          <div id="logo">C</div>
+          <h1>CCRM</h1>
+          <p>Sign in with your registered email</p>
+        </div>
+        
+        <div id="login-box">
+          <div className="input-label"> Your Email: </div>
+          <input type="email" name="email" value={this.state.email} onChange={this.handleChange}/><br />
+          <div className="input-label"> Enter password: </div>
+          <input type="password" name="password" value={this.state.password} onChange={this.handleChange}/><br />
+          <button id="login-button" onClick={this.handleSubmit}>Sign In</button>
+        </div>
+        <p>Don't have an account? Contact CCRM team</p>
       </div>
     )
   }

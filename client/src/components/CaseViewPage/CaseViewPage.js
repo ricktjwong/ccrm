@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import './caseview.css'
+import Sidebar from 'components/Sidebar';
+import Topbar from 'components/Topbar';
 
 class CaseViewPage extends Component {
   constructor (props) {
@@ -43,15 +45,18 @@ class CaseViewPage extends Component {
 
     return (
       <div className="caseview">
-        <p>Successfully logged in</p>
-        <p>Case:</p>
-        <p>{ this.caseItems }</p>
-        Conversations:
-        <p>{ this.conversations }</p>
-        Client Details:
-        <p>{ this.client }</p>
-        Timelines:
-        <p>{ this.timelines }</p>
+        <Topbar />
+        <Sidebar />
+        <div className="content">
+          Case:
+          <p>{ this.caseItems }</p>
+          Conversations:
+          <p>{ this.conversations }</p>
+          Client Details:
+          <p>{ this.client }</p>
+          Timelines:
+          <p>{ this.timelines }</p>
+        </div>
       </div>
     )
   }
