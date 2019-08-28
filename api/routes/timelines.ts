@@ -1,5 +1,5 @@
-var express = require('express')
-var router = express.Router()
+import express from 'express'
+let router = express.Router()
 const dbConversations = require('../queries/timelines')
 
 router.get('/', dbConversations.getTimelines)
