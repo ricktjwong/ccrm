@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import SidebarContent from './SidebarContent'
-import SidebarIcon from './SidebarIcon'
+import { FaBars } from 'react-icons/fa'
 
-class Sidebar extends Component {
-  constructor (props) {
+interface State {
+  isOpen: boolean
+}
+
+class Sidebar extends Component<{}, State> {
+  constructor (props: any) {
     super(props)
 
     this.state = {
@@ -23,7 +27,7 @@ class Sidebar extends Component {
     return <div className="sidebar-container">
       <SidebarContent isOpen={this.state.isOpen} />
       <div className="sidebar-icon">
-        <SidebarIcon isOpen={this.state.isOpen} handleClick={this.toggleSidebar} />
+        <div id="icon" onClick={this.toggleSidebar}><FaBars/></div>
       </div>
     </div>
   }

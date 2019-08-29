@@ -1,8 +1,17 @@
 import React, { Component } from 'react'
+import { RouteComponentProps } from 'react-router'
 import './login.css'
 
-class LoginPage extends Component {
-  constructor (props) {
+interface Props extends RouteComponentProps {}
+
+interface State {
+  email: string,
+  password: string,
+  [key: string]: string
+}
+
+class LoginPage extends Component<Props, State> {
+  constructor (props: Props) {
     super(props)
 
     this.state = {
@@ -44,7 +53,7 @@ class LoginPage extends Component {
     document.title = 'Login Page'
   }
 
-  handleChange (event) {
+  handleChange (event: any) {
     const { name, value } = event.target
     this.setState({ [name]: value })
   }
@@ -62,15 +71,15 @@ class LoginPage extends Component {
           <h1>CCRM</h1>
           <p>Sign in with your registered email</p>
         </div>
-        
+
         <div id="login-box">
           <div className="input-label"> Your Email: </div>
           <input type="email" name="email" value={this.state.email} onChange={this.handleChange}/><br />
           <div className="input-label"> Enter password: </div>
           <input type="password" name="password" value={this.state.password} onChange={this.handleChange}/><br />
-          <button id="login-button" onClick={this.handleSubmit}>Sign In</button>
+          <button id="login-button" onClick={this.handleSubmit} >Sign In</button>
         </div>
-        <p>Don't have an account? Contact CCRM team</p>
+        <p>Don&apos;t have an account? Contact CCRM team</p>
       </div>
     )
   }
