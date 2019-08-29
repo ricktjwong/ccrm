@@ -15,6 +15,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",
     "react-transition-group": "^4.2.2",
+    "serve": "^11.1.0",
     "typescript": "3.5.3"
   },
   "scripts": {
@@ -22,7 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --fix ./src/*.tsx ./src/**/*.tsx ./src/**/**/*.tsx"
+    "lint": "eslint src --ext .tsx,.ts"
   },
   "eslintConfig": {
     "extends": "react-app"

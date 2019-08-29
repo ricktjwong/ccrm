@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import Sidebar from 'components/Sidebar'
 import { Topbar } from 'components/Topbar'
 import { RouteComponentProps } from 'react-router'
-import { Case } from 'model/case'
-import { Timeline } from 'model/timeline'
-import { Conversation } from 'model/conversation'
+import { Case } from 'models/Case'
+import { Conversation } from 'models/Conversation'
+import { Timeline } from 'models/Timeline'
 import './caseview.css'
 
 interface Props extends RouteComponentProps {}
 
 interface State {
   cases: Case[]
-  caseId: string
+    caseId: string;
 }
 
 class CaseViewPage extends Component<Props, State> {

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { Topbar } from 'components/Topbar'
 import Sidebar from 'components/Sidebar'
-import { Case } from 'model/case'
+import { Case } from 'models/Case'
 import './casesview.css'
 
 interface Props extends RouteComponentProps {
