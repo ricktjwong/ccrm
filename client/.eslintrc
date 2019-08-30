@@ -1,6 +1,23 @@
 {
+  "settings": {
+    "react": {
+      "version": "16.9"
+    }
+  },
+  "env": {
+    "jest": true
+  },
+  "globals": {
+    "fetch": false,
+    "sessionStorage": false
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "extends": [
     "@opengovsg/eslint-config-opengovsg",
     "plugin:react/recommended",
-  ]
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "warn"
+  }
 }

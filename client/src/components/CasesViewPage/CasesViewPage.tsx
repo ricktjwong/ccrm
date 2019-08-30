@@ -1,10 +1,20 @@
 import React, { Component } from 'react'
+import { RouteComponentProps } from 'react-router-dom'
+import { Topbar } from 'components/Topbar'
+import Sidebar from 'components/Sidebar'
+import { Case } from 'models/Case'
 import './casesview.css'
-import Sidebar from 'components/Sidebar';
-import Topbar from 'components/Topbar';
 
-class CasesViewPage extends Component {
-  constructor (props) {
+interface Props extends RouteComponentProps {
+  listItems: string[]
+}
+
+interface State {
+  cases: Case[]
+}
+
+class CasesViewPage extends Component<Props, State> {
+  constructor (props: Props) {
     super(props)
 
     this.state = {
@@ -27,8 +37,7 @@ class CasesViewPage extends Component {
     document.title = 'View Cases'
   }
 
-  viewCase (caseId) {
-    console.log('caseid: ' + caseId)
+  viewCase (caseId: string) {
     this.props.history.push({
       pathname: '/case',
       state: { caseId: caseId },
@@ -36,7 +45,7 @@ class CasesViewPage extends Component {
   }
 
   render () {
-    this.listItems = this.state.cases.map((d) =>
+    let listItems = this.state.cases.map((d: Case) =>
       <li key={d.id}> {d.clientName} | {d.caseDesc} |
         {d.assignedAgency} - {d.agencyPoc} | {d.createdAt} |
         <button onClick={() => this.viewCase(d.id)}>View Case</button>
@@ -49,7 +58,7 @@ class CasesViewPage extends Component {
         <Sidebar />
         <div className="case-content">
           Cases:
-          <p>{ this.listItems }</p>
+          <p>{ listItems }</p>
         </div>
       </div>
     )

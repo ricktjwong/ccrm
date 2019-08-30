@@ -1,8 +1,19 @@
 import React, { Component } from 'react'
+import { RouteComponentProps } from 'react-router'
 import './create.css'
 
-class CreateUserPage extends Component {
-  constructor (props) {
+interface Props extends RouteComponentProps {}
+
+interface State {
+  apiResponse: string,
+  name: string,
+  email: string,
+  password: string,
+  [key: string]: string
+}
+
+class CreateUserPage extends Component<Props, State> {
+  constructor (props: Props) {
     super(props)
 
     this.state = {
@@ -37,7 +48,7 @@ class CreateUserPage extends Component {
       }),
     })
       .then(res => {
-        console.log(res.text())
+        res.text()
       })
       .catch(err => err)
   }
@@ -47,12 +58,12 @@ class CreateUserPage extends Component {
     document.title = 'Create User Page'
   }
 
-  handleChange (event) {
+  handleChange (event: any) {
     const { name, value } = event.target
     this.setState({ [name]: value })
   }
 
-  handleSubmit (event) {
+  handleSubmit (event: any) {
     event.preventDefault()
     this.createUser()
   }

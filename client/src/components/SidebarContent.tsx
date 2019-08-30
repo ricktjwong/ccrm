@@ -1,49 +1,51 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { Transition } from 'react-transition-group'
 
 const duration = 200
 
 const sidebarStyle = {
-  transition: `width ${duration}ms`
+  transition: `width ${duration}ms`,
 }
 
-const sidebarTransitionStyles = {
-  entering: { width: 0 },
+const sidebarTransitionStyles: {[key: string]: {[key: string]: string}} = {
+  entering: { width: '0px' },
   entered: { width: '200px' },
   exiting: { width: '200px' },
-  exited: { width: 0 }
+  exited: { width: '0px' },
 }
 
 const linkStyle = {
-  transition: `opacity ${duration}ms`
+  transition: `opacity ${duration}ms`,
 }
 
-const linkTransitionStyles = {
+const linkTransitionStyles: {[key: string]: {[key: string]: number}} = {
   entering: { opacity: 0 },
   entered: { opacity: 1 },
   exiting: { opacity: 1 },
-  exited: { opacity: 0 }
+  exited: { opacity: 0 },
 }
 
-class SidebarContent extends Component {
+interface Props extends RouteComponentProps {
+  isOpen: boolean
+}
 
-  constructor (props) {
+class SidebarContent extends Component<Props, {}> {
+  constructor (props: Props) {
     super(props)
     this.navTo = this.navTo.bind(this)
   }
 
-
-  navTo(route) {
+  navTo (route: string) {
     this.props.history.push(route)
   }
 
   renderLinks = () => {
     return <Transition in={this.props.isOpen} timeout={duration}>
-      {(state) => (
+      {(state: any) => (
         <div style={{
           ...linkStyle,
-          ...linkTransitionStyles[state]
+          ...linkTransitionStyles[state],
         }}>
           <div onClick={() => this.navTo('/')} className="sidebar-link">My Workspace</div>
           <div className="sidebar-link">Inbox</div>
@@ -54,18 +56,20 @@ class SidebarContent extends Component {
       )}
     </Transition>
   }
-  
-  render() {
-    return <Transition in={this.props.isOpen} timeout={duration}>
-      {(state) => (
-        <div className="sidebar" style={{
-          ...sidebarStyle,
-          ...sidebarTransitionStyles[state]
-        }}>
-          {this.renderLinks()}
-        </div>
-      )}
-    </Transition>
+
+  render () {
+    return (
+      <Transition in={this.props.isOpen} timeout={duration}>
+        {(state: any) => (
+          <div className="sidebar" style={{
+            ...sidebarStyle,
+            ...sidebarTransitionStyles[state],
+          }}>
+            {this.renderLinks()}
+          </div>
+        )}
+      </Transition>
+    )
   }
 }
 
