@@ -1,8 +1,8 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo, ForeignKey } from 'sequelize-typescript'
 import { Case } from './Case'
 
-@Table({tableName: 'actionplans'})
-export class Actionplan extends Model<Actionplan> {
+@Table({tableName: 'actionPlans'})
+export class ActionPlan extends Model<ActionPlan> {
   @Column
   action: string
 

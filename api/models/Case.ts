@@ -1,6 +1,6 @@
 import { HasMany, ForeignKey, HasOne, Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript'
 
-import { Actionplan } from './Actionplan'
+import { ActionPlan } from './ActionPlan'
 import { User } from './User'
 import { Conversation } from './Conversation'
 import { Client } from './Client'
@@ -40,8 +40,8 @@ export class Case extends Model<Case> {
   @HasMany(() => Conversation)
   conversations: Conversation[]
 
-  @HasMany(() => Actionplan)
-  actionplans: Actionplan[]
+  @HasMany(() => ActionPlan)
+  actionplans: ActionPlan[]
 
   @HasMany(() => Timeline)
   timelines: Timeline[]
