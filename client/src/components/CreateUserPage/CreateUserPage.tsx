@@ -5,10 +5,10 @@ import './create.css'
 interface Props extends RouteComponentProps {}
 
 interface State {
-  apiResponse: string,
-  name: string,
-  email: string,
-  password: string,
+  apiResponse: string
+  name: string
+  email: string
+  password: string
   [key: string]: string
 }
 
