@@ -5,8 +5,8 @@ import './login.css'
 interface Props extends RouteComponentProps {}
 
 interface State {
-  email: string,
-  password: string,
+  email: string
+  password: string
   [key: string]: string
 }
 
