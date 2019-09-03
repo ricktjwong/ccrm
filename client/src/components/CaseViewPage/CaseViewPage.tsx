@@ -11,7 +11,7 @@ interface Props extends RouteComponentProps {}
 
 interface State {
   cases: Case[]
-  caseId: string
+  caseId: number
 }
 
 class CaseViewPage extends Component<Props, State> {

@@ -30,5 +30,5 @@ export class ActionPlan extends Model<ActionPlan> {
   caseId: number
 
   @BelongsTo(() => Case)
-  cases: Case[]
+  case: Case
 }
