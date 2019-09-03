@@ -3,10 +3,23 @@
 /**
  * Module dependencies.
  */
+var { sequelize } = require('../sequelize')
 
 var app = require('../app')
+
 var debug = require('debug')('api:server')
 var http = require('http')
+
+/**
+ * Bootstrap the database schema if `NODE_ENV` is not production
+ */
+if (process.env.NODE_ENV !== 'production') {
+  (
+    async function () {
+      await sequelize.sync()
+    }
+  )()
+}
 
 /**
  * Get port from environment and store in Express.

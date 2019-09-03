@@ -6,6 +6,7 @@
     "start": "ts-node ./bin/www",
     "build": "tsc",
     "prestart": "npm run build",
+    "seed-db": "npm run build && ts-node ./scripts/seed-db",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --fix --ext .ts"
