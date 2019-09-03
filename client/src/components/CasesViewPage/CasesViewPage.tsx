@@ -37,7 +37,7 @@ class CasesViewPage extends Component<Props, State> {
     document.title = 'View Cases'
   }
 
-  viewCase (caseId: string) {
+  viewCase (caseId: number) {
     this.props.history.push({
       pathname: '/case',
       state: { caseId: caseId },

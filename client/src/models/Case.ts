@@ -9,7 +9,7 @@ export interface Case {
   clientName: string
   conversations: Conversation[]
   createdAt: Date
-  id: string
+  id: number
   timelines: Timeline[]
   updatedAt: Date
 }

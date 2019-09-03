@@ -22,7 +22,7 @@ export class User extends Model<User> {
   updatedAt!: Date
 
   @ForeignKey(() => Case)
-  caseId: string
+  caseId: number
 
   @HasMany(() => Case)
   cases: Case[]

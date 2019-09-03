@@ -2,7 +2,7 @@ export interface Timeline {
   createdAt: Date
   details: string
   from: string
-  id: string
+  id: number
   subject: string
   updatedAt: Date
 }

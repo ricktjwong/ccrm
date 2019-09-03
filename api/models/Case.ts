@@ -41,7 +41,7 @@ export class Case extends Model<Case> {
   conversations: Conversation[]
 
   @HasMany(() => ActionPlan)
-  actionplans: ActionPlan[]
+  actionPlans: ActionPlan[]
 
   @HasMany(() => Timeline)
   timelines: Timeline[]

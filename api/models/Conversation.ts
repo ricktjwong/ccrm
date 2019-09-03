@@ -18,7 +18,7 @@ export class Conversation extends Model<Conversation> {
   updatedAt!: Date
 
   @ForeignKey(() => Case)
-  caseId: string
+  caseId: number
 
   @BelongsTo(() => Case)
   case: Case

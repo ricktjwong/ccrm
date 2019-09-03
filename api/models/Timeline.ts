@@ -21,7 +21,7 @@ export class Timeline extends Model<Timeline> {
   updatedAt!: Date
 
   @ForeignKey(() => Case)
-  caseId: string
+  caseId: number
 
   @BelongsTo(() => Case)
   case: Case

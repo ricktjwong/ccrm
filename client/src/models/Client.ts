@@ -6,7 +6,7 @@ export interface Client {
   employmentStatus: string
   gender: string
   grossHouseholdIncome: number
-  id: string
+  id: number
   maritalStatus: string
   name: string
   nationality: string
