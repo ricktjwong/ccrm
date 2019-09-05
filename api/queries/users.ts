@@ -1,6 +1,7 @@
+import * as bcrypt from 'bcrypt'
 import { Request, Response, NextFunction } from 'express'
+
 import { User } from '../models/User'
-let bcrypt = require('bcrypt')
 
 // GET
 const getUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -92,15 +93,15 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-function verifyPassword (req: any, res: Response, next: NextFunction) {
+const verifyPassword = (req: any, res: Response, next: NextFunction) => {
   const data = req.data
-  bcrypt.compare(data.password, data.user.password, function (err: any, result: any) {
-    if (err) {
-      next(err)
-    } else {
-      res.status(200).send({ isValid: result, id: data.user.id })
-    }
-  })
+  try {
+    const isValid = bcrypt.compareSync(data.password, data.user.password)
+    res.status(isValid ? 200 : 403).send({ isValid, id: data.user.id })
+  } catch (error) {
+    const err = { status: error.status || 500, message: error }
+    next(err)
+  }
 }
 
 module.exports = {

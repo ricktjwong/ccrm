@@ -12,6 +12,7 @@
     "lint-fix": "eslint . --fix --ext .ts"
   },
   "dependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/express": "^4.17.1",
     "@types/sequelize": "^4.28.4",
     "bcrypt": "^3.0.6",
