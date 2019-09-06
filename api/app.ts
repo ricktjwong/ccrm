@@ -17,10 +17,6 @@ const requireAuth = passport.authenticate('jwt', { session: false })
 
 let app = express()
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'hbs')
-
 app.use(bodyParser.json())
 app.use(
   bodyParser.urlencoded({
