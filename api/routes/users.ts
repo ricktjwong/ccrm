@@ -7,6 +7,7 @@ const requireAuth = passport.authenticate('jwt', { session: false })
 
 let router = express.Router()
 const dbUsers = require('../queries/users')
+const dbCases = require('../queries/cases')
 
 router.get('/', requireAuth, dbUsers.getUsers)
 
@@ -22,5 +23,7 @@ router.post('/authenticate',
 router.put('/:id', requireAuth, dbUsers.updateUser)
 
 router.delete('/:id', requireAuth, dbUsers.deleteUser)
+
+router.get('/:id/cases', requireAuth, dbCases.getCasesByUserId)
 
 export default router

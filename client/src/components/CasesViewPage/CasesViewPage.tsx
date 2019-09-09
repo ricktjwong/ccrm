@@ -26,12 +26,12 @@ class CasesViewPage extends Component<Props, State> {
 
   callAPI () {
     let id = 1
-    fetch('http://localhost:9000/cases/userId/' + id, {
+    fetch(`http://localhost:9000/users/${id}/cases`, {
       method: 'GET',
       credentials: 'include',
     })
       .then(res => res.json())
-      .then(res => this.setState({ cases: res }))
+      .then(cases => this.setState({ cases }))
       .catch(err => err)
   }
 
