@@ -4,4 +4,4 @@ const dbConversations = require('../queries/timelines')
 
 router.get('/', dbConversations.getTimelines)
 
-module.exports = router
+export default router

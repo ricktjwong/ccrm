@@ -6,7 +6,7 @@ interface State {
   isOpen: boolean
 }
 
-class Sidebar extends Component<{}, State> {
+export class Sidebar extends Component<{}, State> {
   constructor (props: any) {
     super(props)
 
@@ -32,5 +32,3 @@ class Sidebar extends Component<{}, State> {
     </div>
   }
 }
-
-export default Sidebar

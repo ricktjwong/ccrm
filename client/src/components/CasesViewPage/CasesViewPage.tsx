@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { Topbar } from 'components/Topbar'
-import Sidebar from 'components/Sidebar'
+import { Sidebar } from 'components/Sidebar'
 import { Case } from 'models/Case'
 import './casesview.css'
 
@@ -26,7 +26,10 @@ class CasesViewPage extends Component<Props, State> {
 
   callAPI () {
     let id = 1
-    fetch('http://localhost:9000/cases/userId/' + id)
+    fetch('http://localhost:9000/cases/userId/' + id, {
+      method: 'GET',
+      credentials: 'include',
+    })
       .then(res => res.json())
       .then(res => this.setState({ cases: res }))
       .catch(err => err)

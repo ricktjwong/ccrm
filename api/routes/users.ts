@@ -1,17 +1,26 @@
 import express from 'express'
+import passport from 'passport'
+import jwtLogin from '../utils/passport'
+
+passport.use(jwtLogin)
+const requireAuth = passport.authenticate('jwt', { session: false })
+
 let router = express.Router()
 const dbUsers = require('../queries/users')
 
-router.get('/', dbUsers.getUsers)
-router.get('/:id', dbUsers.getUserById)
+router.get('/', requireAuth, dbUsers.getUsers)
 
-router.post('/', dbUsers.createUser)
+router.get('/:id', requireAuth, dbUsers.getUserById)
+
+router.post('/', requireAuth, dbUsers.createUser)
+
 router.post('/authenticate',
   dbUsers.getUserByEmail,
   dbUsers.verifyPassword,
 )
 
-router.put('/:id', dbUsers.updateUser)
-router.delete('/:id', dbUsers.deleteUser)
+router.put('/:id', requireAuth, dbUsers.updateUser)
 
-module.exports = router
+router.delete('/:id', requireAuth, dbUsers.deleteUser)
+
+export default router

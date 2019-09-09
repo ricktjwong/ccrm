@@ -6,4 +6,4 @@ router.get('/', dbCases.getCases)
 router.get('/:id', dbCases.getCasesByCaseId)
 router.get('/userId/:id', dbCases.getCasesByUserId)
 
-module.exports = router
+export default router

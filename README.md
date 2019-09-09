@@ -26,11 +26,17 @@ $ createdb api -U opengov
 
 Create a .env file with the following variables:
 <pre>
+export NODE_ENV=development || production
+export PORT=9000
 export DB_USER=opengov
 export DB_PASSWORD=YOUR_PASSWORD
 export DB_DATABASE=api
 export DB_HOST=localhost
 export DB_PORT=5432
+export COOKIE_DOMAIN=localhost || my-production-domain
+export JWT_SECRET=mysecret
+export JWT_MAX_AGE=3600000
+export ORIGIN=http://localhost:3000 || https://my-production-domain:3000
 </pre>
 
 ```
@@ -40,6 +46,11 @@ $ npm start
 ```
 
 ## Client
+
+Create a .env file with the following variables (you can skip this step and `PORT` will default to 3000):
+<pre>
+export PORT=3000
+</pre>
 
 ```
 # Start frontend on localhost:3000

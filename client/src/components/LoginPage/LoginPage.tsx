@@ -30,6 +30,7 @@ class LoginPage extends Component<Props, State> {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         email: this.state.email,
         password: this.state.password,

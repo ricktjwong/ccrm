@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Sidebar from 'components/Sidebar'
+import { Sidebar } from 'components/Sidebar'
 import { Topbar } from 'components/Topbar'
 import { RouteComponentProps } from 'react-router'
 import './home.css'
@@ -16,6 +16,7 @@ class HomePage extends Component<RouteComponentProps> {
 
   logout () {
     sessionStorage.clear()
+    localStorage.clear()
     this.props.history.push('/')
   }
 

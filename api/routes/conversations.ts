@@ -4,4 +4,4 @@ const dbConversations = require('../queries/conversations')
 
 router.get('/', dbConversations.getConversations)
 
-module.exports = router
+export default router

@@ -1,15 +1,20 @@
 import express from 'express'
+import passport from 'passport'
+import jwtLogin from './utils/passport'
+import bodyParser from 'body-parser'
+import path from 'path'
+import cookieParser from 'cookie-parser'
+import logger from 'morgan'
+import cors from 'cors'
+import indexRouter from './routes/index'
+import usersRouter from './routes/users'
+import conversationsRouter from './routes/conversations'
+import casesRouter from './routes/cases'
+import timelinesRouter from './routes/timelines'
+import { origin } from './config'
 
-const bodyParser = require('body-parser')
-let path = require('path')
-let cookieParser = require('cookie-parser')
-let logger = require('morgan')
-let cors = require('cors')
-let indexRouter = require('./routes/index')
-let usersRouter = require('./routes/users')
-let conversationsRouter = require('./routes/conversations')
-let casesRouter = require('./routes/cases')
-let timelinesRouter = require('./routes/timelines')
+passport.use(jwtLogin)
+const requireAuth = passport.authenticate('jwt', { session: false })
 
 let app = express()
 
@@ -23,7 +28,7 @@ app.use(
     extended: true,
   })
 )
-app.use(cors())
+app.use(cors({credentials: true, origin: origin}))
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -32,9 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/conversations', conversationsRouter)
-app.use('/cases', casesRouter)
-app.use('/timelines', timelinesRouter)
+app.use('/conversations', requireAuth, conversationsRouter)
+app.use('/cases', requireAuth, casesRouter)
+app.use('/timelines', requireAuth, timelinesRouter)
 
 // error handler
 app.use(function (err: any, req: express.Request, res: express.Response) {

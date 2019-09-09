@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt'
+import jwt from 'jwt-simple'
 import { Request, Response, NextFunction } from 'express'
-
+import { jwtConfig } from '../config'
 import { User } from '../models/User'
 
 // GET
@@ -93,10 +94,28 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const genToken = (user: User) => {
+  const timestamp = new Date().getTime()
+  return jwt.encode({ sub: user.id, iat: timestamp }, jwtConfig.secret)
+}
+
 const verifyPassword = (req: any, res: Response, next: NextFunction) => {
   const data = req.data
   try {
     const isValid = bcrypt.compareSync(data.password, data.user.password)
+    if (isValid) {
+      res.cookie(
+        'jwt',
+        genToken(data.user),
+        {
+          domain: jwtConfig.cookieDomain,
+          path: '/',
+          maxAge: parseInt(jwtConfig.maxAge),
+          httpOnly: true,
+          secure: jwtConfig.secure,
+        }
+      )
+    }
     res.status(isValid ? 200 : 403).send({ isValid, id: data.user.id })
   } catch (error) {
     const err = { status: error.status || 500, message: error }
