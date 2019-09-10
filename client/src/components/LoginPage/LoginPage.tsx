@@ -1,17 +1,23 @@
 import React, { Component } from 'react'
 import { RouteComponentProps } from 'react-router'
+import { connect } from 'react-redux'
+import * as actions from '../../redux/actions'
 import './login.css'
 
-interface Props extends RouteComponentProps {}
+interface LoginPageProps extends RouteComponentProps {
+  signin: (props: LoginPageState, callback: Function) => any
+  authenticated: string
+  errorMessage: string
+}
 
-interface State {
+interface LoginPageState {
   email: string
   password: string
   [key: string]: string
 }
 
-class LoginPage extends Component<Props, State> {
-  constructor (props: Props) {
+class LoginPage extends Component<LoginPageProps, LoginPageState> {
+  constructor (props: LoginPageProps) {
     super(props)
 
     this.state = {
@@ -24,30 +30,13 @@ class LoginPage extends Component<Props, State> {
   }
 
   login () {
-    fetch('http://localhost:9000/users/authenticate', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-      }),
+    this.props.signin(this.state, () => {
+      if (this.props.authenticated === 'user') {
+        this.props.history.push('/')
+      } else {
+        console.error('login error')
+      }
     })
-      .then(res => res.json())
-      .then(res => {
-        if (res.isValid) {
-          sessionStorage.setItem('user', JSON.stringify('user'))
-          this.props.history.push('/')
-        } else {
-          console.error('Error: ', res)
-        }
-      })
-      .catch(function (err) {
-        console.error('Login Error: ', err)
-      })
   }
 
   componentDidMount () {
@@ -86,4 +75,11 @@ class LoginPage extends Component<Props, State> {
   }
 }
 
-export { LoginPage }
+function mapStateToProps (state: any) {
+  return {
+    errorMessage: state.auth.errorMessage,
+    authenticated: state.auth.authenticated,
+  }
+}
+
+export default connect(mapStateToProps, actions)(LoginPage)

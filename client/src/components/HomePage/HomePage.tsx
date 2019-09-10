@@ -2,10 +2,16 @@ import React, { Component } from 'react'
 import { Sidebar } from 'components/Sidebar'
 import { Topbar } from 'components/Topbar'
 import { RouteComponentProps } from 'react-router'
+import { connect } from 'react-redux'
+import * as actions from '../../redux/actions'
 import './home.css'
 
-class HomePage extends Component<RouteComponentProps> {
-  constructor (props: RouteComponentProps) {
+interface HomePageConnectedProps extends RouteComponentProps{
+  signout: () => void
+}
+
+class HomePage extends Component<HomePageConnectedProps> {
+  constructor (props: HomePageConnectedProps) {
     super(props)
     this.logout = this.logout.bind(this)
   }
@@ -15,9 +21,8 @@ class HomePage extends Component<RouteComponentProps> {
   }
 
   logout () {
-    sessionStorage.clear()
-    localStorage.clear()
-    this.props.history.push('/')
+    this.props.signout()
+    this.props.history.push('/login')
   }
 
   render () {
@@ -34,4 +39,4 @@ class HomePage extends Component<RouteComponentProps> {
   }
 }
 
-export { HomePage }
+export default connect(null, actions)(HomePage)
