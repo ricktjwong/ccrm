@@ -2,7 +2,7 @@ import express from 'express'
 import { checkSchema } from 'express-validator'
 
 const dbCases = require('../queries/cases')
-import { getMessagesByCaseId }  from '../queries/timelines'
+import { getMessagesByCaseId, postMessageToCase }  from '../queries/timelines'
 
 import { checkValidationPassed } from '../utils/express'
 
@@ -34,6 +34,7 @@ const checkValidTimelineQuery = checkSchema({
   },
 })
 
+router.post('/:caseId/messages', postMessageToCase)
 router.get(
   '/:caseId/messages',
   checkValidTimelineQuery,

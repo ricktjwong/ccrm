@@ -4,7 +4,7 @@ import { Model, Op } from 'sequelize'
 import { Timeline } from '../models/Timeline'
 import { Message } from '../models/Message'
 
-import { IFindAll } from '../utils/types'
+import { IFindAll, ICreate } from '../utils/types'
 
 
 // GET
@@ -41,4 +41,25 @@ const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>
     }
   }
 
+const postTimelineItemToCase = <T extends Model<T>>(MType: ICreate<T>) => 
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const caseId = Number(req.params.caseId)
+      const user: any = req.user!
+      const userId = Number(user.id)
+      const payload = req.body
+      const item = await MType.create({
+        ...payload,
+        userId,
+        caseId,
+      })
+      res.status(200).json(item)
+    } catch (error) {
+      console.error(error)
+      const err = { status: error.status || 500, message: error }
+      next(err)
+    }
+  }
+
 export const getMessagesByCaseId = getTimelineItemsByCaseId(Message)
+export const postMessageToCase = postTimelineItemToCase(Message)
