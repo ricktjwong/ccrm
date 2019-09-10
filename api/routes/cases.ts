@@ -1,11 +1,44 @@
 import express from 'express'
-let router = express.Router()
+import { checkSchema } from 'express-validator'
+
 const dbCases = require('../queries/cases')
+import { getMessagesByCaseId }  from '../queries/timelines'
+
+import { checkValidationPassed } from '../utils/express'
+
+let router = express.Router()
 
 router.get('/', dbCases.getCases)
 router.get('/:id', dbCases.getCasesByCaseId)
 
-// TODO: add endpoints that CRUD conversations 
-// and timeline events for a given case
+// TODO: add endpoints that CRUD timeline events for a given case
+
+const checkValidTimelineQuery = checkSchema({
+  from: {
+    in: ['query'],
+    isInt: true,
+    toInt: true,
+    optional: { options: { nullable: true } },
+  },
+  to: {
+    in: ['query'],
+    isInt: true,
+    toInt: true,
+    optional: { options: { nullable: true } },
+  },
+  limit: {
+    in: ['query'],
+    isInt: { options: { max: 50 } },
+    toInt: true,
+    optional: { options: { nullable: true } },
+  },
+})
+
+router.get(
+  '/:caseId/messages',
+  checkValidTimelineQuery,
+  checkValidationPassed,
+  getMessagesByCaseId
+)
 
 export default router
