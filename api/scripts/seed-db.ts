@@ -4,7 +4,7 @@ import { sequelize } from '../sequelize'
 import { User } from '../models/User'
 import { Case } from '../models/Case'
 import { Client } from '../models/Client'
-import { Conversation } from '../models/Conversation'
+import { Message } from '../models/Message'
 import { Timeline } from '../models/Timeline'
 
 const ERASE_DB_ON_SYNC = true
@@ -13,6 +13,12 @@ const populateTables = async () => {
   await User.create({
     name: 'admin',
     email: 'admin@opengov.com',
+    password: process.env.DB_PASSWORD,
+  })
+
+  await User.create({
+    name: 'admin2',
+    email: 'admin2@opengov.com',
     password: process.env.DB_PASSWORD,
   })
 
@@ -37,15 +43,15 @@ const populateTables = async () => {
       grossHouseholdIncome: '100000',
       phone: 91829381,
     },
-    conversations: [{ message: 'Hi can you please revert',
-      from: 'admin' },
-    { message: 'Apologies for taking so long, was on holiday',
-      from: 'admin2' }],
+    messages: [{ text: 'Hi can you please revert',
+      userId: 1 },
+    { text: 'Apologies for taking so long, was on holiday',
+      userId: 2 }],
     timelines: [{ subject: 'Referral',
       from: 'Anakin',
       details: 'Case has been referred to SSO' }],
   }, {
-    include: [Client, Conversation, Timeline],
+    include: [Client, Message, Timeline],
   })
 
   await Case.create({
@@ -69,13 +75,13 @@ const populateTables = async () => {
       grossHouseholdIncome: '100000',
       phone: 91829381,
     },
-    conversations: [{ message: 'Hi, would like to enquire about the delay', from: 'admin' },
-      { message: 'Sorry its taking too long to talk to HDB', from: 'admin2' }],
+    messages: [{ text: 'Hi, would like to enquire about the delay', userId: 1 },
+      { text: 'Sorry its taking too long to talk to HDB', userId: 2 }],
     timelines: [{ subject: 'Coordination',
       from: 'Anakin',
       details: 'Case has been referred to SSO' }],
   }, {
-    include: [Client, Conversation, Timeline],
+    include: [Client, Message, Timeline],
   })
 }
 

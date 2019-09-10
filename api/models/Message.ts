@@ -1,13 +1,17 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo, ForeignKey } from 'sequelize-typescript'
 import { Case } from './Case'
+import { User } from './User'
 
-@Table({tableName: 'conversations'})
-export class Conversation extends Model<Conversation> {
+@Table({tableName: 'messages'})
+export class Message extends Model<Message> {
   @Column
-  message: string
+  text: string
 
-  @Column
-  from: string
+  @ForeignKey(() => User)
+  userId: number
+
+  @BelongsTo(() => User)
+  user: User
 
   @CreatedAt
   @Column

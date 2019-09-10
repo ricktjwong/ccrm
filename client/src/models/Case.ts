@@ -1,5 +1,5 @@
 import { Timeline } from './Timeline'
-import { Conversation } from './Conversation'
+import { Message } from './Message'
 
 export interface Case {
   agencyPoc: string
@@ -7,7 +7,7 @@ export interface Case {
   caseDesc: string
   client: any
   clientName: string
-  conversations: Conversation[]
+  messages: Message[]
   createdAt: Date
   id: number
   timelines: Timeline[]

@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 import cors from 'cors'
 import usersRouter from './routes/users'
-import conversationsRouter from './routes/conversations'
 import casesRouter from './routes/cases'
 import timelinesRouter from './routes/timelines'
 import { origin } from './config'
@@ -31,7 +30,6 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/users', usersRouter)
-app.use('/conversations', requireAuth, conversationsRouter)
 app.use('/cases', requireAuth, casesRouter)
 app.use('/timelines', requireAuth, timelinesRouter)
 

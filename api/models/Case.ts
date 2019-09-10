@@ -2,7 +2,7 @@ import { HasMany, ForeignKey, HasOne, Model, Column, Table, CreatedAt, UpdatedAt
 
 import { ActionPlan } from './ActionPlan'
 import { User } from './User'
-import { Conversation } from './Conversation'
+import { Message } from './Message'
 import { Client } from './Client'
 import { Timeline } from './Timeline'
 
@@ -37,8 +37,8 @@ export class Case extends Model<Case> {
   @HasOne(() => Client)
   client: Client
 
-  @HasMany(() => Conversation)
-  conversations: Conversation[]
+  @HasMany(() => Message)
+  messages: Message[]
 
   @HasMany(() => ActionPlan)
   actionPlans: ActionPlan[]

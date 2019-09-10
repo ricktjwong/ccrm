@@ -1,4 +1,4 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, HasMany, ForeignKey, BeforeCreate } from 'sequelize-typescript'
+import { Model, Column, Table, CreatedAt, UpdatedAt, HasMany, BeforeCreate, Unique } from 'sequelize-typescript'
 import { hashPassword } from '../utils/hooks'
 import { Case } from './Case'
 
@@ -10,6 +10,7 @@ export class User extends Model<User> {
   @Column
   password: string
 
+  @Unique
   @Column
   email: string
 
@@ -20,9 +21,6 @@ export class User extends Model<User> {
   @UpdatedAt
   @Column
   updatedAt!: Date
-
-  @ForeignKey(() => Case)
-  caseId: number
 
   @HasMany(() => Case)
   cases: Case[]

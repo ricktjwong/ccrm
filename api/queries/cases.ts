@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
 import { Case } from '../models/Case'
 import { Client } from '../models/Client'
-import { Conversation } from '../models/Conversation'
+import { Message } from '../models/Message'
 import { Timeline } from '../models/Timeline'
+import { User } from '../models/User'
 
 // GET
 const getCases = async (req: Request, res: Response, next: NextFunction) => {
@@ -30,10 +31,22 @@ const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction)
   const id = parseInt(req.params.id)
   try {
     const msfCase = await Case.findAll({
-      include: [Client,
-        Conversation,
-        Timeline],
-      where: {id} })
+      include: [
+        Client,
+        Timeline,
+        {
+          model: Message,
+          include: [
+            {
+              model: User,
+              attributes: [ 'name', 'email' ],
+            }
+          ],
+          // TODO: limit retrieval to n latest messages
+        },
+      ],
+      where: { id } 
+    })
 
     res.status(200).json(msfCase)
   } catch (error) {
