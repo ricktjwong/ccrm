@@ -34,9 +34,13 @@ app.use('/cases', requireAuth, casesRouter)
 app.use('/timelines', requireAuth, timelinesRouter)
 
 // error handler
-app.use(function (err: any, req: express.Request, res: express.Response) {
-  console.error('error caught:', err)
-  res.status(err.status).send(err)
+interface HasStatus {
+  status?: number
+}
+
+app.use(function (err: Error & HasStatus, req: express.Request, res: express.Response, next: express.NextFunction) {
+  console.error('error caught:', err, res)
+  res.status(err.status || 500).send(err)
 })
 
 module.exports = app
