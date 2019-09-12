@@ -2,7 +2,7 @@ import express from 'express'
 import { checkSchema } from 'express-validator'
 
 const dbCases = require('../queries/cases')
-import { getMessagesByCaseId, postMessageToCase }  from '../queries/timelines'
+import { getMessagesByCaseId, postMessageToCase, getEventsByCaseId, postEventToCase }  from '../queries/timelines'
 
 import { checkValidationPassed } from '../utils/express'
 
@@ -40,6 +40,14 @@ router.get(
   checkValidTimelineQuery,
   checkValidationPassed,
   getMessagesByCaseId
+)
+
+router.post('/:caseId/events', postEventToCase)
+router.get(
+  '/:caseId/events',
+  checkValidTimelineQuery,
+  checkValidationPassed,
+  getEventsByCaseId
 )
 
 export default router

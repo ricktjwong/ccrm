@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import { Model, Op } from 'sequelize'
 
 import { Message } from '../models/Message'
+import { Event } from '../models/Event'
+import { User } from '../models/User'
 
 import { IFindAll, ICreate } from '../utils/types'
 
@@ -17,6 +19,12 @@ const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>
           caseId,
           createdAt: { [Op.between]: [ new Date(from), new Date(to) ] },
         },
+        include: [
+          {
+            model: User,
+            attributes: [ 'name', 'email' ],
+          },
+        ],
         order: [
           ['createdAt', 'DESC']
         ],
@@ -52,3 +60,6 @@ const postTimelineItemToCase = <T extends Model<T>>(MType: ICreate<T>) =>
 
 export const getMessagesByCaseId = getTimelineItemsByCaseId(Message)
 export const postMessageToCase = postTimelineItemToCase(Message)
+
+export const getEventsByCaseId = getTimelineItemsByCaseId(Event)
+export const postEventToCase = postTimelineItemToCase(Event)
