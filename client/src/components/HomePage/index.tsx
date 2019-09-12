@@ -7,7 +7,7 @@ import * as actions from '../../redux/actions'
 import './home.css'
 
 interface HomePageConnectedProps extends RouteComponentProps{
-  signout: () => void
+  logout: () => void
 }
 
 class HomePage extends Component<HomePageConnectedProps> {
@@ -21,7 +21,7 @@ class HomePage extends Component<HomePageConnectedProps> {
   }
 
   logout () {
-    this.props.signout()
+    this.props.logout()
     this.props.history.push('/login')
   }
 

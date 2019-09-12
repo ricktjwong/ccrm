@@ -5,7 +5,7 @@ import * as actions from '../../redux/actions'
 import './login.css'
 
 interface LoginPageProps extends RouteComponentProps {
-  signin: (props: LoginPageState) => Promise<any>
+  login: (props: LoginPageState) => Promise<any>
   authenticated: boolean
   errorMessage: string
 }
@@ -30,11 +30,12 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
   }
 
   async login () {
-    await this.props.signin(this.state)
+    await this.props.login(this.state)
     if (this.props.authenticated) {
       this.props.history.push('/')
     } else {
       console.error('login error')
+      console.error(this.props.errorMessage)
     }
   }
 

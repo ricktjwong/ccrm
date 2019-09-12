@@ -80,4 +80,4 @@ class CaseViewPage extends Component<Props, State> {
   }
 }
 
-export { CaseViewPage }
+export default CaseViewPage

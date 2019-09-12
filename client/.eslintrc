@@ -8,8 +8,7 @@
     "jest": true
   },
   "globals": {
-    "fetch": false,
-    "sessionStorage": false
+    "fetch": false
   },
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],

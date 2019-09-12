@@ -87,4 +87,4 @@ class CreateUserPage extends Component<Props, State> {
   }
 }
 
-export { CreateUserPage }
+export default CreateUserPage
