@@ -1,23 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 import { Model, Op } from 'sequelize'
 
-import { Timeline } from '../models/Timeline'
 import { Message } from '../models/Message'
 
 import { IFindAll, ICreate } from '../utils/types'
 
 
 // GET
-export const getTimelines = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const timelines = await Timeline.findAll()
-    res.status(200).json(timelines)
-  } catch (error) {
-    const err = { status: error.status || 500, message: error }
-    next(err)
-  }
-}
-
 const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) => 
   async (req: Request, res: Response, next: NextFunction) => {
     try {

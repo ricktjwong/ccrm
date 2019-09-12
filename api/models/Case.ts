@@ -4,7 +4,7 @@ import { ActionPlan } from './ActionPlan'
 import { User } from './User'
 import { Message } from './Message'
 import { Client } from './Client'
-import { Timeline } from './Timeline'
+import { Event } from './Event'
 
 @Table({tableName: 'cases'})
 export class Case extends Model<Case> {
@@ -43,6 +43,6 @@ export class Case extends Model<Case> {
   @HasMany(() => ActionPlan)
   actionPlans: ActionPlan[]
 
-  @HasMany(() => Timeline)
-  timelines: Timeline[]
+  @HasMany(() => Event)
+  events: Event[]
 }

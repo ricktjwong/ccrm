@@ -5,7 +5,7 @@ import { User } from '../models/User'
 import { Case } from '../models/Case'
 import { Client } from '../models/Client'
 import { Message } from '../models/Message'
-import { Timeline } from '../models/Timeline'
+import { Event } from '../models/Event'
 
 const ERASE_DB_ON_SYNC = true
 
@@ -47,11 +47,11 @@ const populateTables = async () => {
       userId: 1 },
     { text: 'Apologies for taking so long, was on holiday',
       userId: 2 }],
-    timelines: [{ subject: 'Referral',
-      from: 'Anakin',
+    events: [{ subject: 'Referral',
+      userId: 1,
       details: 'Case has been referred to SSO' }],
   }, {
-    include: [Client, Message, Timeline],
+    include: [Client, Message, Event],
   })
 
   await Case.create({
@@ -77,11 +77,11 @@ const populateTables = async () => {
     },
     messages: [{ text: 'Hi, would like to enquire about the delay', userId: 1 },
       { text: 'Sorry its taking too long to talk to HDB', userId: 2 }],
-    timelines: [{ subject: 'Coordination',
-      from: 'Anakin',
+    events: [{ subject: 'Coordination',
+      userId: 2,
       details: 'Case has been referred to SSO' }],
   }, {
-    include: [Client, Message, Timeline],
+    include: [Client, Message, Event],
   })
 }
 
