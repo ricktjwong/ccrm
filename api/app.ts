@@ -8,7 +8,6 @@ import logger from 'morgan'
 import cors from 'cors'
 import usersRouter from './routes/users'
 import casesRouter from './routes/cases'
-import timelinesRouter from './routes/timelines'
 import { origin } from './config'
 
 passport.use(jwtLogin)
@@ -31,7 +30,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/users', usersRouter)
 app.use('/cases', requireAuth, casesRouter)
-app.use('/timelines', requireAuth, timelinesRouter)
 
 // error handler
 interface HasStatus {

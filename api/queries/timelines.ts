@@ -1,23 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
 import { Model, Op } from 'sequelize'
 
-import { Timeline } from '../models/Timeline'
 import { Message } from '../models/Message'
+import { Event } from '../models/Event'
+import { User } from '../models/User'
 
 import { IFindAll, ICreate } from '../utils/types'
 
 
 // GET
-export const getTimelines = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const timelines = await Timeline.findAll()
-    res.status(200).json(timelines)
-  } catch (error) {
-    const err = { status: error.status || 500, message: error }
-    next(err)
-  }
-}
-
 const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) => 
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -28,6 +19,12 @@ const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>
           caseId,
           createdAt: { [Op.between]: [ new Date(from), new Date(to) ] },
         },
+        include: [
+          {
+            model: User,
+            attributes: [ 'name', 'email' ],
+          },
+        ],
         order: [
           ['createdAt', 'DESC']
         ],
@@ -63,3 +60,6 @@ const postTimelineItemToCase = <T extends Model<T>>(MType: ICreate<T>) =>
 
 export const getMessagesByCaseId = getTimelineItemsByCaseId(Message)
 export const postMessageToCase = postTimelineItemToCase(Message)
+
+export const getEventsByCaseId = getTimelineItemsByCaseId(Event)
+export const postEventToCase = postTimelineItemToCase(Event)

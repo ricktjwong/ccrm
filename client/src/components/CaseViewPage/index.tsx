@@ -4,7 +4,7 @@ import { Topbar } from 'components/Topbar'
 import { RouteComponentProps } from 'react-router'
 import { Case } from 'models/Case'
 import { Message } from 'models/Message'
-import { Timeline } from 'models/Timeline'
+import { Event } from 'models/Event'
 import './caseview.css'
 
 interface Props extends RouteComponentProps {}
@@ -42,7 +42,7 @@ class CaseViewPage extends Component<Props, State> {
   render () {
     let caseItems
     let messages
-    let timelines
+    let events
     let client
 
     if (this.state.cases.length > 0) {
@@ -52,7 +52,7 @@ class CaseViewPage extends Component<Props, State> {
       messages = this.state.cases[0].messages.map((x: Message, idx: number) =>
         <li key={idx}> {x.userId} @ {x.createdAt} - {x.text}</li>
       )
-      timelines = this.state.cases[0].timelines.map((x: Timeline, idx: number) =>
+      events = this.state.cases[0].events.map((x: Event, idx: number) =>
         <li key={idx}> {x.subject} | {x.details} </li>
       )
       let clientData = this.state.cases[0].client
@@ -72,8 +72,8 @@ class CaseViewPage extends Component<Props, State> {
           <p>{ messages }</p>
           Client Details:
           <p>{ client }</p>
-          Timelines:
-          <p>{ timelines }</p>
+          Timeline:
+          <p>{ events }</p>
         </div>
       </div>
     )

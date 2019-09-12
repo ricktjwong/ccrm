@@ -1,4 +1,4 @@
-import { Timeline } from './Timeline'
+import { Event } from './Event'
 import { Message } from './Message'
 
 export interface Case {
@@ -10,6 +10,6 @@ export interface Case {
   messages: Message[]
   createdAt: Date
   id: number
-  timelines: Timeline[]
+  events: Event[]
   updatedAt: Date
 }

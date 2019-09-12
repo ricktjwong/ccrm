@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { Case } from '../models/Case'
 import { Client } from '../models/Client'
 import { Message } from '../models/Message'
-import { Timeline } from '../models/Timeline'
+import { Event } from '../models/Event'
 import { User } from '../models/User'
 
 // GET
@@ -33,7 +33,16 @@ const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction)
     const msfCase = await Case.findAll({
       include: [
         Client,
-        Timeline,
+        {
+          model:  Event,
+          include: [
+            {
+              model: User,
+              attributes: [ 'name', 'email' ],
+            }
+          ],
+          // TODO: limit retrieval to n latest events
+        },
         {
           model: Message,
           include: [

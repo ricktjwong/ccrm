@@ -1,4 +1,4 @@
-export interface Timeline {
+export interface Event {
   createdAt: Date
   details: string
   from: string
