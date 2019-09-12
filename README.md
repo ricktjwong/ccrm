@@ -50,6 +50,7 @@ $ npm start
 Create a .env file with the following variables (you can skip this step and `PORT` will default to 3000):
 <pre>
 export PORT=3000
+export REACT_APP_API_URL=http://localhost:9000
 </pre>
 
 ```

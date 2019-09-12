@@ -1,17 +1,17 @@
-import { AUTH_SUCCESS, AUTH_ERROR } from './types'
+import { AUTH_OK, AUTH_FORBIDDEN, AUTH_ERROR } from './types'
 import { Dispatch } from 'redux'
 
 export const signout = () => {
   sessionStorage.clear()
   return {
-    type: AUTH_SUCCESS,
-    payload: '',
+    type: AUTH_OK,
+    payload: false,
   }
 }
 
-export const signin = (props: any, callback: any) => async (dispatch: Dispatch) => {
+export const signin = (props: any) => async (dispatch: Dispatch) => {
   try {
-    let response = await fetch('http://localhost:9000/users/authenticate', {
+    let response = await fetch(process.env.REACT_APP_API_URL + '/users/authenticate', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -24,16 +24,13 @@ export const signin = (props: any, callback: any) => async (dispatch: Dispatch) 
       }),
     })
     let data = await response.json()
-    if (data.isValid) {
-      dispatch({ type: AUTH_SUCCESS, payload: 'user' })
-      sessionStorage.setItem('user', 'user')
-      callback()
+    if (response.status === 200) {
+      dispatch({ type: AUTH_OK, payload: true })
+      sessionStorage.setItem('user', data.id)
     } else {
-      dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' })
-      callback()
+      dispatch({ type: AUTH_FORBIDDEN, payload: 'Invalid login credentials' })
     }
   } catch (error) {
-    dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' })
-    callback()
+    dispatch({ type: AUTH_ERROR, payload: 'Auth error' })
   }
 }
