@@ -3,6 +3,7 @@ import jwt from 'jwt-simple'
 import { Request, Response, NextFunction } from 'express'
 import { jwtConfig } from '../config'
 import { User } from '../models/User'
+import { sendEmail } from '../utils/mailer'
 
 // GET
 const getUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -123,6 +124,78 @@ const verifyPassword = (req: any, res: Response, next: NextFunction) => {
   }
 }
 
+const validateEmail = async (req: any, res: Response, next: NextFunction) => {
+  const data = req.body
+  if (!data.email) {
+    const err = { status: 400, message: 'Email missing' }
+    next(err)
+  } else {
+    try {
+      const user = await User.findOne({
+        where: { email: data.email },
+      })
+      if (user) {
+        req.data = { user }
+        next()
+      } else {
+        const err = { status: 404, message: 'No user found' }
+        next(err)
+      }
+    } catch (error) {
+      const err = { status: error.status || 500, message: error }
+      next(err)
+    }
+  }
+}
+
+const sendAuthEmail = async (req: any, res: Response, next: NextFunction) => {
+  let user = req.data.user
+  let token = genToken(user)
+  try {
+    await sendEmail(token)
+    res.status(200).json(`Email sent`)
+  } catch (error) {
+    const err = { status: error.status || 500, message: error }
+    next(err)
+  }
+}
+
+const validateJWT = async (req: any, res: Response, next: NextFunction) => {
+  let data = req.body
+  if (data.token) {
+    try {
+      jwt.decode(data.token, jwtConfig.secret)
+      next()
+    } catch (error) {
+      const err = { status: error.status || 500, message: error }
+      next(err)
+    }
+  }
+}
+
+const setCookieWithAuthToken = async (req: any, res: Response, next: NextFunction) => {
+  let data = req.body
+  try {
+    if (data.token) {
+      res.cookie(
+        'jwt',
+        data.token,
+        {
+          domain: jwtConfig.cookieDomain,
+          path: '/',
+          maxAge: parseInt(jwtConfig.maxAge),
+          httpOnly: true,
+          secure: jwtConfig.secure,
+        }
+      )
+      res.status(200).send(`Cookie set`)
+    }
+  } catch (error) {
+    const err = { status: error.status || 500, message: error }
+    next(err)
+  }
+}
+
 module.exports = {
   getUsers,
   getUserById,
@@ -131,4 +204,8 @@ module.exports = {
   deleteUser,
   getUserByEmail,
   verifyPassword,
+  validateEmail,
+  sendAuthEmail,
+  validateJWT,
+  setCookieWithAuthToken,
 }

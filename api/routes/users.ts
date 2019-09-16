@@ -26,4 +26,8 @@ router.delete('/:id', requireAuth, dbUsers.deleteUser)
 
 router.get('/:id/cases', requireAuth, dbCases.getCasesByUserId)
 
+router.post('/sendAuthEmail', dbUsers.validateEmail, dbUsers.sendAuthEmail)
+
+router.post('/validateJWTAndSetCookie', dbUsers.validateJWT, dbUsers.setCookieWithAuthToken)
+
 export default router
