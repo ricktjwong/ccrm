@@ -30,7 +30,7 @@ class CaseViewPage extends Component<Props, State> {
       credentials: 'include',
     })
       .then(res => res.json())
-      .then(res  => this.setState({ case: res }))
+      .then(res => this.setState({ case: res }))
       .catch(err => err)
   }
 
@@ -56,11 +56,11 @@ class CaseViewPage extends Component<Props, State> {
         <li key={idx}> {x.subject} | {x.details} </li>
       )
       let clientData = this.state.case.client
-      
-      client = Object.entries(clientData).map(((tuple: [string, string | number | Date], idx: number) => {
+
+      client = Object.entries(clientData).map((tuple: [string, string | number | Date], idx: number) => {
         const [key, value] = tuple
         return <li key={idx}> {key}: {value}</li>
-      }))
+      })
     }
 
     return (
