@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - '12'
+before_script:
+  - cd api && npm install && cd ..
+  - cd client && npm install && cd ..
+script:
+  - cd api && npm run lint && cd ..
+  - cd client && npm run lint && cd ..
