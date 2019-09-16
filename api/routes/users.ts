@@ -15,11 +15,6 @@ router.get('/:id', requireAuth, dbUsers.getUserById)
 
 router.post('/', requireAuth, dbUsers.createUser)
 
-router.post('/authenticate',
-  dbUsers.getUserByEmail,
-  dbUsers.verifyPassword,
-)
-
 router.put('/:id', requireAuth, dbUsers.updateUser)
 
 router.delete('/:id', requireAuth, dbUsers.deleteUser)
