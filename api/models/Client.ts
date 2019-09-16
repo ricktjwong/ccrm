@@ -1,4 +1,4 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo, ForeignKey } from 'sequelize-typescript'
+import { Model, Column, Table, CreatedAt, UpdatedAt, Unique, HasMany } from 'sequelize-typescript'
 import { Case } from './Case'
 
 @Table({tableName: 'clients'})
@@ -7,11 +7,12 @@ export class Client extends Model<Client> {
   name: string
 
   @Column
-  dob: Date
+  dateOfBirth: Date
 
   @Column
   email: string
 
+  @Unique
   @Column
   nric: string
 
@@ -50,9 +51,6 @@ export class Client extends Model<Client> {
   @Column
   updatedAt!: Date
 
-  @ForeignKey(() => Case)
-  caseId: number
-
-  @BelongsTo(() => Case)
-  case: Case
+  @HasMany(() => Case)
+  cases: Case[]
 }

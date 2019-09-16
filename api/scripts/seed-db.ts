@@ -30,7 +30,7 @@ const populateTables = async () => {
     agencyPoc: 'chewie@moe.edu.sg',
     client: {
       name: 'Han Solo',
-      dob: '12/12/1995',
+      dateOfBirth: '12/12/1995',
       email: 'han@solo.com',
       nric: 'S9347193J',
       nricAddress: '123 Tatooine Street',
@@ -60,28 +60,14 @@ const populateTables = async () => {
     caseDesc: 'Single family, requires HDB loan for family',
     assignedAgency: 'HDB',
     agencyPoc: 'ewok@hdb.edu.sg',
-    client: {
-      name: 'Han Solo',
-      dob: '12/12/1995',
-      email: 'han@solo.com',
-      nric: 'S9347193J',
-      nricAddress: '123 Tatooine Street',
-      address: '123 Tatooine Street',
-      gender: 'Male',
-      nationality: 'Jedi',
-      race: 'Caucasian',
-      maritalStatus: 'Single4Lyfe',
-      employmentStatus: 'Employed',
-      grossHouseholdIncome: '100000',
-      phone: 91829381,
-    },
+    clientId: 1,
     messages: [{ text: 'Hi, would like to enquire about the delay', userId: 1 },
       { text: 'Sorry its taking too long to talk to HDB', userId: 2 }],
     events: [{ subject: 'Coordination',
       userId: 2,
       details: 'Case has been referred to SSO' }],
   }, {
-    include: [Client, Message, Event],
+    include: [Message, Event],
   })
 }
 

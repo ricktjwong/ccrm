@@ -9,9 +9,6 @@ import { Event } from './Event'
 @Table({tableName: 'cases'})
 export class Case extends Model<Case> {
   @Column
-  clientName: string
-
-  @Column
   caseDesc: string
 
   @Column
@@ -34,7 +31,10 @@ export class Case extends Model<Case> {
   @BelongsTo(() => User)
   user: User
 
-  @HasOne(() => Client)
+  @ForeignKey(() => Client)
+  clientId: number
+
+  @BelongsTo(() => Client)
   client: Client
 
   @HasMany(() => Message)

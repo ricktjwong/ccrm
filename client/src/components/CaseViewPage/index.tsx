@@ -10,7 +10,7 @@ import './caseview.css'
 interface Props extends RouteComponentProps {}
 
 interface State {
-  cases: Case[]
+  case?: Case
   caseId: number
 }
 
@@ -19,7 +19,7 @@ class CaseViewPage extends Component<Props, State> {
     super(props)
 
     this.state = {
-      cases: [],
+      case: undefined, // case id known, but yet to retrieve case
       caseId: this.props.location.state.caseId,
     }
   }
@@ -30,7 +30,7 @@ class CaseViewPage extends Component<Props, State> {
       credentials: 'include',
     })
       .then(res => res.json())
-      .then(res => this.setState({ cases: res }))
+      .then(res  => this.setState({ case: res }))
       .catch(err => err)
   }
 
@@ -40,25 +40,27 @@ class CaseViewPage extends Component<Props, State> {
   }
 
   render () {
-    let caseItems
+    let caseDetails
     let messages
     let events
     let client
 
-    if (this.state.cases.length > 0) {
-      caseItems = this.state.cases.map((x) =>
-        <li key={x.id}> {x.agencyPoc}: {x.caseDesc} | {x.createdAt}</li>
-      )
-      messages = this.state.cases[0].messages.map((x: Message, idx: number) =>
+    if (this.state.case) {
+      const { id, agencyPoc, caseDesc, createdAt } = this.state.case
+      caseDetails = <li key={id}> {agencyPoc}: {caseDesc} | {createdAt}</li>
+
+      messages = this.state.case.messages.map((x: Message, idx: number) =>
         <li key={idx}> {x.userId} @ {x.createdAt} - {x.text}</li>
       )
-      events = this.state.cases[0].events.map((x: Event, idx: number) =>
+      events = this.state.case.events.map((x: Event, idx: number) =>
         <li key={idx}> {x.subject} | {x.details} </li>
       )
-      let clientData = this.state.cases[0].client
-      client = Object.keys(clientData).map((key: string, idx: number) =>
-        <li key={idx}> {key}: {clientData[key]}</li>
-      )
+      let clientData = this.state.case.client
+      
+      client = Object.entries(clientData).map(((tuple: [string, string | number | Date], idx: number) => {
+        const [key, value] = tuple
+        return <li key={idx}> {key}: {value}</li>
+      }))
     }
 
     return (
@@ -67,7 +69,7 @@ class CaseViewPage extends Component<Props, State> {
         <Sidebar />
         <div className="content">
           Case:
-          <p>{ caseItems }</p>
+          <p>{ caseDetails }</p>
           Messages:
           <p>{ messages }</p>
           Client Details:

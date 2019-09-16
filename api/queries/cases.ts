@@ -17,9 +17,12 @@ const getCases = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const getCasesByUserId = async (req: Request, res: Response, next: NextFunction) => {
-  const id = parseInt(req.params.id)
+  const userId = parseInt(req.params.id)
   try {
-    const cases = await Case.findAll({ where: {userId: id} })
+    const cases = await Case.findAll({ 
+      where: { userId },
+      include: [ Client ]
+    })
     res.status(200).json(cases)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
@@ -30,7 +33,7 @@ const getCasesByUserId = async (req: Request, res: Response, next: NextFunction)
 const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id)
   try {
-    const msfCase = await Case.findAll({
+    const thisCase = await Case.findByPk(id, {
       include: [
         Client,
         {
@@ -54,10 +57,9 @@ const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction)
           // TODO: limit retrieval to n latest messages
         },
       ],
-      where: { id } 
     })
 
-    res.status(200).json(msfCase)
+    res.status(200).json(thisCase)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)

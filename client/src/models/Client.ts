@@ -1,7 +1,7 @@
 export interface Client {
   address: string
   createdAt: Date
-  dob: Date
+  dateOfBirth: Date
   email: string
   employmentStatus: string
   gender: string
