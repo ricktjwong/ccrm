@@ -1,4 +1,4 @@
-import { HasMany, ForeignKey, HasOne, Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript'
+import { HasMany, ForeignKey, Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript'
 
 import { ActionPlan } from './ActionPlan'
 import { User } from './User'

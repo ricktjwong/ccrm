@@ -7,9 +7,8 @@ import { User } from '../models/User'
 
 import { IFindAll, ICreate } from '../utils/types'
 
-
 // GET
-const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) => 
+const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { from = 0, to = Date.now(), limit = 20 } = req.query
@@ -26,7 +25,7 @@ const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>
           },
         ],
         order: [
-          ['createdAt', 'DESC']
+          ['createdAt', 'DESC'],
         ],
         limit,
       })
@@ -38,7 +37,7 @@ const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>
     }
   }
 
-const postTimelineItemToCase = <T extends Model<T>>(MType: ICreate<T>) => 
+const postTimelineItemToCase = <T extends Model<T>>(MType: ICreate<T>) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const caseId = Number(req.params.caseId)

@@ -19,9 +19,9 @@ const getCases = async (req: Request, res: Response, next: NextFunction) => {
 const getCasesByUserId = async (req: Request, res: Response, next: NextFunction) => {
   const userId = parseInt(req.params.id)
   try {
-    const cases = await Case.findAll({ 
+    const cases = await Case.findAll({
       where: { userId },
-      include: [ Client ]
+      include: [ Client ],
     })
     res.status(200).json(cases)
   } catch (error) {
@@ -37,12 +37,12 @@ const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction)
       include: [
         Client,
         {
-          model:  Event,
+          model: Event,
           include: [
             {
               model: User,
               attributes: [ 'name', 'email' ],
-            }
+            },
           ],
           // TODO: limit retrieval to n latest events
         },
@@ -52,7 +52,7 @@ const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction)
             {
               model: User,
               attributes: [ 'name', 'email' ],
-            }
+            },
           ],
           // TODO: limit retrieval to n latest messages
         },

@@ -1,10 +1,10 @@
 import express from 'express'
 import { checkSchema } from 'express-validator'
-
-const dbCases = require('../queries/cases')
-import { getMessagesByCaseId, postMessageToCase, getEventsByCaseId, postEventToCase }  from '../queries/timelines'
+import { getMessagesByCaseId, postMessageToCase, getEventsByCaseId, postEventToCase } from '../queries/timelines'
 
 import { checkValidationPassed } from '../utils/express'
+
+const dbCases = require('../queries/cases')
 
 let router = express.Router()
 

@@ -36,6 +36,7 @@ interface HasStatus {
   status?: number
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(function (err: Error & HasStatus, req: express.Request, res: express.Response, next: express.NextFunction) {
   console.error('error caught:', err, res)
   res.status(err.status || 500).send(err)
