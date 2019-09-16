@@ -73,3 +73,7 @@ button:focus {
 	border-radius: 15px;
 	background-color: #484848;
 }
+
+#email-status {
+  color: green;
+}
