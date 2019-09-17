@@ -2,7 +2,7 @@ import jwt from 'jwt-simple'
 import { Request, Response, NextFunction } from 'express'
 import { jwtConfig } from '../config'
 import { User } from '../models/User'
-import { sendEmail } from '../utils/mailer'
+import { sendOTPViaEmail } from '../utils/mailer'
 
 // GET
 const getUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -102,7 +102,7 @@ const sendAuthEmail = async (req: any, res: Response, next: NextFunction) => {
   let user = req.data.user
   let token = genToken(user)
   try {
-    await sendEmail(token)
+    await sendOTPViaEmail(user.email, token)
     res.status(200).json(`Email sent`)
   } catch (error) {
     const err = { status: error.status || 500, message: error }

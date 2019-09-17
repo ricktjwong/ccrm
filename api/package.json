@@ -29,6 +29,7 @@
     "jwt-simple": "^0.5.6",
     "morgan": "~1.9.1",
     "nodemailer": "^6.3.0",
+    "nodemailer-direct-transport": "^3.3.2",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "pg": "^7.11.0",
@@ -57,6 +58,9 @@
     }
   },
   "lint-staged": {
-    "*.ts": ["eslint --fix", "git add"]
+    "*.ts": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }

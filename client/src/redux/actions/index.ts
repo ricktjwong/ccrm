@@ -27,7 +27,7 @@ export const getCases = () => async (dispatch: Dispatch) => {
 
 export const validateEmailAndSendAuthToken = (props: any) => async (dispatch: Dispatch) => {
   try {
-    let response = await fetch(process.env.REACT_APP_API_URL + '/users/sendAuthEmail', {
+    let response = await fetch(process.env.REACT_APP_API_URL + '/users/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -50,7 +50,7 @@ export const validateEmailAndSendAuthToken = (props: any) => async (dispatch: Di
 
 export const validateJWTAndSetCookie = (token: string) => async (dispatch: Dispatch) => {
   try {
-    let response = await fetch(process.env.REACT_APP_API_URL + '/users/validateJWTAndSetCookie', {
+    let response = await fetch(process.env.REACT_APP_API_URL + '/users/login/callback', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

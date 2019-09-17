@@ -30,9 +30,10 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  async getQueryString () {
+  async validateJWTAndRedirect () {
     let qs = queryString.parse(this.props.location.search)
-    if (Object.keys(qs).length === 1 && Object.keys(qs)[0] === 'token') {
+    let isUrlValid = this.props.location.pathname === '/login/callback' && Object.keys(qs).length === 1 && Object.keys(qs)[0] === 'token'
+    if (isUrlValid) {
       let token = qs['token'] as string
       await this.props.validateJWTAndSetCookie(token)
       if (this.props.authenticated) {
@@ -55,7 +56,7 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
   componentDidMount () {
     document.title = 'Login Page'
     try {
-      this.getQueryString()
+      this.validateJWTAndRedirect()
     } catch (e) {
       console.error(e)
     }
