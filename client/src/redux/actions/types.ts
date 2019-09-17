@@ -1,5 +1,6 @@
 export const AUTH_OK = 'AUTH_OK'
 export const AUTH_FORBIDDEN = 'AUTH_FORBIDDEN'
 export const AUTH_ERROR = 'AUTH_ERROR'
+export const EMAIL_OK = 'EMAIL_OK'
 export const API_OK = 'API_OK'
 export const USER_LOGOUT = 'USER_LOGOUT'

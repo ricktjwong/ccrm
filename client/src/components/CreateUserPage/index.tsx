@@ -8,7 +8,6 @@ interface State {
   apiResponse: string
   name: string
   email: string
-  password: string
   [key: string]: string
 }
 
@@ -20,7 +19,6 @@ class CreateUserPage extends Component<Props, State> {
       apiResponse: '',
       name: '',
       email: '',
-      password: '',
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -44,7 +42,6 @@ class CreateUserPage extends Component<Props, State> {
       body: JSON.stringify({
         name: this.state.name,
         email: this.state.email,
-        password: this.state.password,
       }),
     })
       .then(res => {
@@ -77,8 +74,6 @@ class CreateUserPage extends Component<Props, State> {
           <input type="text" name="name" value={this.state.name} onChange={this.handleChange}/><br />
           Email:
           <input type="email" name="email" value={this.state.email} onChange={this.handleChange}/><br />
-          Password:
-          <input type="password" name="password" value={this.state.password} onChange={this.handleChange}/><br />
           <input type="submit" />
           <p>{this.state.apiResponse}</p>
         </div>

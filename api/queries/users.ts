@@ -1,8 +1,8 @@
-import * as bcrypt from 'bcrypt'
 import jwt from 'jwt-simple'
 import { Request, Response, NextFunction } from 'express'
 import { jwtConfig } from '../config'
 import { User } from '../models/User'
+import { sendOTPViaEmail } from '../utils/mailer'
 
 // GET
 const getUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -26,38 +26,13 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-const getUserByEmail = async (req: any, res: Response, next: NextFunction) => {
-  const data = req.body
-  if (!data.email || !data.password) {
-    const err = { status: 400, message: 'Email and/or password missing' }
-    next(err)
-  } else {
-    try {
-      const user = await User.findOne({
-        where: { email: data.email },
-      })
-      if (user) {
-        req.data = { password: data.password, user }
-        next()
-      } else {
-        const err = { status: 404, message: 'No user found' }
-        next(err)
-      }
-    } catch (error) {
-      const err = { status: error.status || 500, message: error }
-      next(err)
-    }
-  }
-}
-
 // POST
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, email, password } = req.body
+  const { name, email } = req.body
   try {
     const user = await User.create({
       name: name,
       email: email,
-      password: password,
     })
     res.status(201).send(`User added with ID: ${user.id}`)
   } catch (error) {
@@ -99,14 +74,62 @@ const genToken = (user: User) => {
   return jwt.encode({ sub: user.id, iat: timestamp }, jwtConfig.secret)
 }
 
-const verifyPassword = (req: any, res: Response, next: NextFunction) => {
-  const data = req.data
+const validateEmail = async (req: any, res: Response, next: NextFunction) => {
+  const data = req.body
+  if (!data.email) {
+    const err = { status: 400, message: 'Email missing' }
+    next(err)
+  } else {
+    try {
+      const user = await User.findOne({
+        where: { email: data.email },
+      })
+      if (user) {
+        req.data = { user }
+        next()
+      } else {
+        const err = { status: 404, message: 'No user found' }
+        next(err)
+      }
+    } catch (error) {
+      const err = { status: error.status || 500, message: error }
+      next(err)
+    }
+  }
+}
+
+const sendAuthEmail = async (req: any, res: Response, next: NextFunction) => {
+  let user = req.data.user
+  let token = genToken(user)
   try {
-    const isValid = bcrypt.compareSync(data.password, data.user.password)
-    if (isValid) {
+    await sendOTPViaEmail(user.email, token)
+    res.status(200).json(`Email sent`)
+  } catch (error) {
+    const err = { status: error.status || 500, message: error }
+    next(err)
+  }
+}
+
+const validateJWT = async (req: any, res: Response, next: NextFunction) => {
+  let data = req.body
+  if (data.token) {
+    try {
+      jwt.decode(data.token, jwtConfig.secret)
+      next()
+    } catch (error) {
+      const err = { status: error.status || 500, message: error }
+      next(err)
+    }
+  }
+}
+
+const setCookieWithAuthToken = async (req: any, res: Response, next: NextFunction) => {
+  let data = req.body
+  try {
+    if (data.token) {
       res.cookie(
         'jwt',
-        genToken(data.user),
+        data.token,
         {
           domain: jwtConfig.cookieDomain,
           path: '/',
@@ -115,8 +138,8 @@ const verifyPassword = (req: any, res: Response, next: NextFunction) => {
           secure: jwtConfig.secure,
         }
       )
+      res.status(200).send(`Cookie set`)
     }
-    res.status(isValid ? 200 : 403).send({ isValid, id: data.user.id })
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)
@@ -129,6 +152,8 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  getUserByEmail,
-  verifyPassword,
+  validateEmail,
+  sendAuthEmail,
+  validateJWT,
+  setCookieWithAuthToken,
 }

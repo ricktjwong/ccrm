@@ -1,4 +1,13 @@
+import nodemailer from 'nodemailer'
+let directTransport = require('nodemailer-direct-transport')
+
 export const origin = process.env.ORIGIN as string
+
+export const transporter = nodemailer.createTransport(
+  directTransport({
+    name: 'smtp.ccrm.com',
+  })
+)
 
 export const dbConfig = {
   database: process.env.DB_DATABASE as string,

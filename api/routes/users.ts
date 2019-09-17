@@ -15,15 +15,14 @@ router.get('/:id', requireAuth, dbUsers.getUserById)
 
 router.post('/', requireAuth, dbUsers.createUser)
 
-router.post('/authenticate',
-  dbUsers.getUserByEmail,
-  dbUsers.verifyPassword,
-)
-
 router.put('/:id', requireAuth, dbUsers.updateUser)
 
 router.delete('/:id', requireAuth, dbUsers.deleteUser)
 
 router.get('/:id/cases', requireAuth, dbCases.getCasesByUserId)
+
+router.post('/login', dbUsers.validateEmail, dbUsers.sendAuthEmail)
+
+router.post('/login/callback', dbUsers.validateJWT, dbUsers.setCookieWithAuthToken)
 
 export default router

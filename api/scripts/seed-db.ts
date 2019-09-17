@@ -13,13 +13,11 @@ const populateTables = async () => {
   await User.create({
     name: 'admin',
     email: 'admin@opengov.com',
-    password: process.env.DB_PASSWORD,
   })
 
   await User.create({
     name: 'admin2',
     email: 'admin2@opengov.com',
-    password: process.env.DB_PASSWORD,
   })
 
   await Case.create({
