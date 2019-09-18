@@ -18,7 +18,7 @@ const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id)
   try {
-    const user = await User.findAll({ where: {id} })
+    const user = await User.findOne({ where: {id} })
     res.status(200).json(user)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
@@ -34,7 +34,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       name: name,
       email: email,
     })
-    res.status(201).send(`User added with ID: ${user.id}`)
+    res.status(201).json(`User added with ID: ${user.id}`)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)
@@ -50,7 +50,8 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
       name,
       email,
     }, { where: {id} })
-    res.status(200).send(`User modified with ID: ${id}`)
+    const user = await User.findOne({ where: {id} })
+    res.status(200).json(user)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)
@@ -62,7 +63,7 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id)
   try {
     await User.destroy({ where: {id} })
-    res.status(200).send(`User deleted with ID: ${id}`)
+    res.status(200).json(`User deleted with ID: ${id}`)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)
@@ -138,7 +139,7 @@ const setCookieWithAuthToken = async (req: any, res: Response, next: NextFunctio
           secure: jwtConfig.secure,
         }
       )
-      res.status(200).send(`Cookie set`)
+      res.status(200).json(`Cookie set`)
     }
   } catch (error) {
     const err = { status: error.status || 500, message: error }

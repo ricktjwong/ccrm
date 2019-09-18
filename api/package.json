@@ -7,7 +7,7 @@
     "build": "tsc",
     "prestart": "npm run build",
     "seed-db": "npm run build && ts-node ./scripts/seed-db",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run seed-db && jest",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --fix --ext .ts"
   },
@@ -34,13 +34,15 @@
     "passport-jwt": "^4.0.0",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^5.10.1",
+    "sequelize": "^5.18.4",
     "sequelize-typescript": "^1.0.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
   },
   "devDependencies": {
     "@opengovsg/eslint-config-opengovsg": "^1.0.6",
+    "@types/jest": "^24.0.18",
+    "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "eslint": "^6.0.0",
@@ -50,7 +52,10 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "husky": "^3.0.5",
-    "lint-staged": "^9.2.5"
+    "jest": "^24.9.0",
+    "lint-staged": "^9.2.5",
+    "supertest": "^4.0.2",
+    "ts-jest": "^24.1.0"
   },
   "husky": {
     "hooks": {
@@ -61,6 +66,27 @@
     "*.ts": [
       "eslint --fix",
       "git add"
+    ]
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/__tests__/**/*.test.ts"
     ]
   }
 }
