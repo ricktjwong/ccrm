@@ -49,7 +49,7 @@ const postTimelineItemToCase = <T extends Model<T>>(MType: ICreate<T>) =>
         userId,
         caseId,
       })
-      res.status(200).json(item)
+      res.status(201).json(item)
     } catch (error) {
       console.error(error)
       const err = { status: error.status || 500, message: error }

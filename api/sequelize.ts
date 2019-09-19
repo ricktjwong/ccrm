@@ -11,4 +11,5 @@ export const sequelize = new Sequelize(
     port: parseInt(dbConfig.port, 10),
     host: dbConfig.host,
     models: [path.join(__dirname, '/models')],
+    logging: dbConfig.logging,
   })
