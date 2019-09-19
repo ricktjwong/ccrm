@@ -2,7 +2,7 @@ import request from 'supertest'
 import jwt from 'jwt-simple'
 import { jwtConfig } from '../../../config'
 import { sequelize } from '../../../sequelize'
-import { populateTables } from '../../../scripts/populateTables'
+import { populateTables } from '../../helpers/populateTables'
 let app = require('../../../app')
 
 describe('route endpoints', () => {
