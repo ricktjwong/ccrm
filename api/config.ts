@@ -15,6 +15,7 @@ export const dbConfig = {
   password: process.env.DB_PASSWORD as string,
   port: process.env.DB_PORT as string,
   user: process.env.DB_USER as string,
+  logging: process.env.NODE_ENV !== 'test',
 }
 
 export const jwtConfig = {

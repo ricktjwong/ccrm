@@ -34,7 +34,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       name: name,
       email: email,
     })
-    res.status(201).json(`User added with ID: ${user.id}`)
+    res.status(201).json(user)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)
