@@ -1,16 +1,18 @@
 import request from 'supertest'
 import jwt from 'jwt-simple'
-import { jwtConfig } from '../../config'
-import { sequelize } from '../../sequelize'
-let app = require('../../app')
+import { jwtConfig } from '../../../config'
+import { sequelize } from '../../../sequelize'
+import { populateTables } from '../../../scripts/populateTables'
+let app = require('../../../app')
 
 describe('check users routes', () => {
-  beforeAll(async () => {
-    await sequelize.sync()
-  })
-
   afterAll(async () => {
     await sequelize.close()
+  })
+
+  beforeEach(async () => {
+    await sequelize.sync({ force: true })
+    await populateTables()
   })
 
   // GET users/
@@ -24,7 +26,7 @@ describe('check users routes', () => {
   it('should return 200 after validating and sending email', async () => {
     let res = await request(app)
       .post('/users/login')
-      .send({email: 'admin@opengov.com'})
+      .send({ email: 'admin@opengov.com' })
       .expect(200)
     expect(res.body).toBe('Email sent')
   })
@@ -35,16 +37,16 @@ describe('check users routes', () => {
 
     // POST users/login/callback
     it('should return 200 after validating JWT and setting cookie', async () => {
-      let res = await request(app)
+      let resPost = await request(app)
         .post('/users/login/callback')
-        .send({token: token})
+        .send({ token })
         .expect(200)
-      expect(res.body).toBe('Cookie set')
+      expect(resPost.body).toBe('Cookie set')
     })
 
     // POST users/
     it('should return 201 after creating a new user', async () => {
-      let res = await request(app)
+      let resPost = await request(app)
         .post('/users')
         .set('cookie', 'jwt=' + token)
         .send({
@@ -52,16 +54,28 @@ describe('check users routes', () => {
           email: 'test@user.com',
         })
         .expect(201)
-      expect(res.body).toBe('User added with ID: 3')
+      expect(resPost.body).toBe('User added with ID: 3')
+
+      let resGet = await request(app)
+        .get('/users/3')
+        .set('cookie', 'jwt=' + token)
+        .expect(200)
+      expect(resGet.body['name']).toBe('test')
     })
 
     // DELETE users/:id
     it('should return 200 after deleting a user', async () => {
-      let res = await request(app)
-        .delete('/users/3')
+      let resDel = await request(app)
+        .delete('/users/2')
         .set('cookie', 'jwt=' + token)
         .expect(200)
-      expect(res.body).toBe('User deleted with ID: 3')
+      expect(resDel.body).toBe('User deleted with ID: 2')
+
+      let resGet = await request(app)
+        .get('/users')
+        .set('cookie', 'jwt=' + token)
+        .expect(200)
+      expect(resGet.body.length).toBe(1)
     })
 
     // GET users
@@ -79,8 +93,8 @@ describe('check users routes', () => {
         .get('/users/1')
         .set('cookie', 'jwt=' + token)
         .expect(200)
-      expect(res.body.length).toBe(1)
-      expect(res.body[0]['email']).toBe('admin@opengov.com')
+      expect(res.body['name']).toBe('admin')
+      expect(res.body['email']).toBe('admin@opengov.com')
     })
 
     // GET users/:id/cases

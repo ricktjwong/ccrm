@@ -7,7 +7,7 @@
     "build": "tsc",
     "prestart": "npm run build",
     "seed-db": "npm run build && ts-node ./scripts/seed-db",
-    "test": "npm run seed-db && jest",
+    "test": "jest",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --fix --ext .ts"
   },
@@ -86,7 +86,7 @@
       }
     },
     "testMatch": [
-      "**/__tests__/**/*.test.ts"
+      "**/tests/**/**/*.test.ts"
     ]
   }
 }

@@ -13,6 +13,7 @@
   "baseUrl": ".",
   "experimentalDecorators": true,
   "emitDecoratorMetadata": true,
+  "resolveJsonModule": true,
   "paths": {
     "*": ["node_modules/*"]
   }
