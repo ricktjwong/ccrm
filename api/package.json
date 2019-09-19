@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "ts-node ./bin/www",
+    "start": "node ./bin/www",
     "build": "tsc",
     "prestart": "npm run build",
-    "seed-db": "npm run build && ts-node ./scripts/seed-db",
+    "seed-db": "npm run build && node ./dist/scripts/seed-db",
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --fix --ext .ts"
@@ -36,9 +36,7 @@
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.18.4",
-    "sequelize-typescript": "^1.0.0",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "sequelize-typescript": "^1.0.0"
   },
   "devDependencies": {
     "@opengovsg/eslint-config-opengovsg": "^1.0.6",
@@ -56,7 +54,9 @@
     "jest": "^24.9.0",
     "lint-staged": "^9.2.5",
     "supertest": "^4.0.2",
-    "ts-jest": "^24.1.0"
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.5.3"
   },
   "husky": {
     "hooks": {
@@ -83,7 +83,7 @@
     },
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "tsconfig.json"
+        "tsConfig": "tsconfig.json"
       }
     },
     "testMatch": [

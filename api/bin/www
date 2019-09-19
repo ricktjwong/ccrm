@@ -3,8 +3,8 @@
 /**
  * Module dependencies.
  */
-var { sequelize } = require('../sequelize')
-var app = require('../app')
+var { sequelize } = require('../dist/sequelize')
+var app = require('../dist/app')
 var debug = require('debug')('api:server')
 var http = require('http')
 
