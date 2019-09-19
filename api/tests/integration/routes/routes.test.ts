@@ -1,5 +1,5 @@
 import request from 'supertest'
-import jwt from 'jwt-simple'
+import jwt from 'jsonwebtoken'
 import { jwtConfig } from '../../../config'
 import { sequelize } from '../../../sequelize'
 import { populateTables } from '../../helpers/populateTables'
@@ -41,8 +41,7 @@ describe('route endpoints', () => {
   })
 
   describe('protected routes', () => {
-    const timestamp = new Date().getTime()
-    let token = jwt.encode({ sub: 1, iat: timestamp }, jwtConfig.secret)
+    let token = jwt.sign({ id: 1 }, jwtConfig.secret, { expiresIn: jwtConfig.expiry })
 
     describe('users routes', () => {
       // POST users/login/callback

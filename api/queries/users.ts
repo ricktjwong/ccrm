@@ -1,6 +1,6 @@
-import jwt from 'jwt-simple'
+import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
-import { jwtConfig } from '../config'
+import { jwtConfig, cookieConfig } from '../config'
 import { User } from '../models/User'
 import { sendOTPViaEmail } from '../utils/mailer'
 
@@ -71,8 +71,7 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const genToken = (user: User) => {
-  const timestamp = new Date().getTime()
-  return jwt.encode({ sub: user.id, iat: timestamp }, jwtConfig.secret)
+  return jwt.sign({ id: user.id }, jwtConfig.secret, { expiresIn: jwtConfig.expiry })
 }
 
 const validateEmail = async (req: any, res: Response, next: NextFunction) => {
@@ -115,7 +114,7 @@ const validateJWT = async (req: any, res: Response, next: NextFunction) => {
   let data = req.body
   if (data.token) {
     try {
-      jwt.decode(data.token, jwtConfig.secret)
+      jwt.verify(data.token, jwtConfig.secret)
       next()
     } catch (error) {
       const err = { status: error.status || 500, message: error }
@@ -132,11 +131,11 @@ const setCookieWithAuthToken = async (req: any, res: Response, next: NextFunctio
         'jwt',
         data.token,
         {
-          domain: jwtConfig.cookieDomain,
+          domain: cookieConfig.domain,
           path: '/',
-          maxAge: parseInt(jwtConfig.maxAge),
+          maxAge: parseInt(cookieConfig.expiry),
           httpOnly: true,
-          secure: jwtConfig.secure,
+          secure: cookieConfig.secure,
         }
       )
       res.status(200).json(`Cookie set`)

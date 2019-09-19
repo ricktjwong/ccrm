@@ -19,8 +19,12 @@ export const dbConfig = {
 }
 
 export const jwtConfig = {
-  cookieDomain: process.env.COOKIE_DOMAIN as string,
+  expiry: process.env.JWT_EXPIRY as string,
   secret: process.env.JWT_SECRET as string,
-  maxAge: process.env.JWT_MAX_AGE as string,
+}
+
+export const cookieConfig = {
+  domain: process.env.COOKIE_DOMAIN as string,
+  expiry: process.env.COOKIE_EXPIRY as string,
   secure: process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test',
 }

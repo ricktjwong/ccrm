@@ -34,8 +34,9 @@ export DB_DATABASE=api
 export DB_HOST=localhost
 export DB_PORT=5432
 export COOKIE_DOMAIN=localhost || my-production-domain
+export COOKIE_EXPIRY=86400000
 export JWT_SECRET=mysecret
-export JWT_MAX_AGE=3600000
+export JWT_EXPIRY=24h
 export ORIGIN=http://localhost:3000 || https://my-production-domain:3000
 </pre>
 
