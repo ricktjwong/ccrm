@@ -21,7 +21,7 @@ const getCasesByUserId = async (req: Request, res: Response, next: NextFunction)
   try {
     const cases = await Case.findAll({
       where: { userId },
-      include: [ Client ],
+      include: [ Client, User ],
     })
     res.status(200).json(cases)
   } catch (error) {
@@ -36,6 +36,7 @@ const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction)
     const thisCase = await Case.findByPk(id, {
       include: [
         Client,
+        User,
         {
           model: Event,
           include: [
