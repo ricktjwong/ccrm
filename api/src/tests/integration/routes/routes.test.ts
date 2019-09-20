@@ -149,7 +149,7 @@ describe('route endpoints', () => {
           .get('/cases/1')
           .set('cookie', 'jwt=' + token)
           .expect(200)
-        expect(res.body['assignedAgency']).toBe('MOE')
+        expect(res.body['caseDesc']).toBe('Single family, requires education grant for son')
       })
 
       // GET cases/:id/messages

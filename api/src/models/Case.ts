@@ -11,12 +11,6 @@ export class Case extends Model<Case> {
   @Column
   caseDesc: string
 
-  @Column
-  assignedAgency: string
-
-  @Column
-  agencyPoc: string
-
   @CreatedAt
   @Column
   createdAt!: Date

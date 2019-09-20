@@ -4,8 +4,6 @@ import { Client } from './Client'
 import { User } from './User'
 
 export interface Case {
-  agencyPoc: string
-  assignedAgency: string
   caseDesc: string
   client: Client
   messages: Message[]

@@ -52,7 +52,7 @@ class CasesViewPage extends Component<Props, CasesViewState> {
   render () {
     let listItems = this.state.cases.map((d: Case) =>
       <li key={d.id}> {d.client.name} | {d.caseDesc} |
-        {d.assignedAgency} - {d.agencyPoc} | {d.createdAt} |
+        {d.user.agency} - {d.user.email} | {d.createdAt} |
         <button onClick={() => this.viewCase(d.id)}>View Case</button>
       </li>
     )

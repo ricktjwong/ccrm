@@ -46,8 +46,8 @@ class CaseViewPage extends Component<Props, State> {
     let client
 
     if (this.state.case) {
-      const { id, agencyPoc, caseDesc, createdAt } = this.state.case
-      caseDetails = <li key={id}> {agencyPoc}: {caseDesc} | {createdAt}</li>
+      const { id, user, caseDesc, createdAt } = this.state.case
+      caseDetails = <li key={id}> {user.agency}: {caseDesc} | {createdAt}</li>
 
       messages = this.state.case.messages.map((x: Message, idx: number) =>
         <li key={idx}> {x.userId} @ {x.createdAt} - {x.text}</li>

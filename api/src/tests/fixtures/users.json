@@ -1,10 +1,12 @@
 [
   {
     "name": "admin",
-    "email": "admin@opengov.com"
+    "email": "admin@opengov.com",
+    "agency": "MOE"
   },
   {
     "name": "admin2",
-    "email": "admin2@opengov.com"
+    "email": "admin2@opengov.com",
+    "agency": "HDB"
   }
 ]
