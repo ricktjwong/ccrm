@@ -102,7 +102,7 @@ function mapStateToProps (state: any) {
   return {
     errorMessage: state.auth.errorMessage,
     authenticated: state.auth.authenticated,
-    emailValid: state.email.emailValid,
+    emailValid: state.user.emailValid,
   }
 }
 

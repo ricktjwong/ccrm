@@ -1,5 +1,6 @@
-import { AUTH_OK, AUTH_FORBIDDEN, AUTH_ERROR, API_OK, USER_LOGOUT, EMAIL_OK } from './types'
+import { AUTH_OK, AUTH_FORBIDDEN, AUTH_ERROR, API_OK, USER_LOGOUT, USER_OK } from './types'
 import { Dispatch } from 'redux'
+import { store } from '../store'
 
 export const logout = () => {
   return {
@@ -9,7 +10,7 @@ export const logout = () => {
 
 export const getCases = () => async (dispatch: Dispatch) => {
   try {
-    let id = 1
+    let id = store.getState().user.userId
     let response = await fetch(process.env.REACT_APP_API_URL + `/users/${id}/cases`, {
       method: 'GET',
       credentials: 'include',
@@ -38,8 +39,10 @@ export const validateEmailAndSendAuthToken = (props: any) => async (dispatch: Di
         email: props.email,
       }),
     })
+    let data = await response.json()
+    let id = data.id
     if (response.status === 200) {
-      dispatch({ type: EMAIL_OK, payload: true })
+      dispatch({ type: USER_OK, payload: {emailValid: true, userId: id} })
     } else {
       dispatch({ type: AUTH_FORBIDDEN, payload: 'Email not in the whitelist' })
     }
@@ -62,7 +65,7 @@ export const validateJWTAndSetCookie = (token: string) => async (dispatch: Dispa
       }),
     })
     if (response.status === 200) {
-      dispatch({ type: AUTH_OK, payload: true })
+      dispatch({ type: AUTH_OK, payload: {authenticated: true} })
     } else {
       dispatch({ type: AUTH_FORBIDDEN, payload: 'Invalid token' })
     }

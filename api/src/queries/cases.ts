@@ -6,7 +6,7 @@ import { Event } from '../models/Event'
 import { User } from '../models/User'
 
 // GET
-const getCases = async (req: Request, res: Response, next: NextFunction) => {
+export const getCases = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cases = await Case.findAll()
     res.status(200).json(cases)
@@ -16,7 +16,7 @@ const getCases = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-const getCasesByUserId = async (req: Request, res: Response, next: NextFunction) => {
+export const getCasesByUserId = async (req: any, res: Response, next: NextFunction) => {
   const userId = parseInt(req.params.id)
   try {
     const cases = await Case.findAll({
@@ -30,7 +30,7 @@ const getCasesByUserId = async (req: Request, res: Response, next: NextFunction)
   }
 }
 
-const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction) => {
+export const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id)
   try {
     const thisCase = await Case.findByPk(id, {
@@ -65,10 +65,4 @@ const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction)
     const err = { status: error.status || 500, message: error }
     next(err)
   }
-}
-
-module.exports = {
-  getCases,
-  getCasesByUserId,
-  getCasesByCaseId,
 }

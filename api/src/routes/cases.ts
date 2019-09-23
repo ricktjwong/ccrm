@@ -1,15 +1,13 @@
 import express from 'express'
 import { checkSchema } from 'express-validator'
 import { getMessagesByCaseId, postMessageToCase, getEventsByCaseId, postEventToCase } from '../queries/timelines'
-
+import { getCases, getCasesByCaseId } from '../queries/cases'
 import { checkValidationPassed } from '../utils/express'
-
-const dbCases = require('../queries/cases')
 
 let router = express.Router()
 
-router.get('/', dbCases.getCases)
-router.get('/:id', dbCases.getCasesByCaseId)
+router.get('/', getCases)
+router.get('/:id', getCasesByCaseId)
 
 // TODO: add endpoints that CRUD timeline events for a given case
 

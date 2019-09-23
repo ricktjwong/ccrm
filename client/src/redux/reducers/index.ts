@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import auth from './auth'
 import api from './api'
-import email from './email'
+import user from './user'
 
 const appReducer = combineReducers({
-  auth, api, email,
+  auth, api, user,
 })
 
 export default appReducer
