@@ -18,7 +18,7 @@ const jwtOptions = {
 const jwtLogin = new JwtStrategy(jwtOptions, async function (payload: any, done: any) {
   try {
     const user = await User.findOne({
-      where: { id: payload.id },
+      where: { id: payload.sub },
     })
     if (user) {
       done(null, user)

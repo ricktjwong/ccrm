@@ -5,7 +5,7 @@ import { User } from '../models/User'
 import { sendOTPViaEmail } from '../utils/mailer'
 
 // GET
-const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await User.findAll()
     res.status(200).json(users)
@@ -15,7 +15,7 @@ const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-const getUserById = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id)
   try {
     const user = await User.findOne({ where: {id} })
@@ -27,7 +27,7 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 // POST
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email } = req.body
   try {
     const user = await User.create({
@@ -42,7 +42,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 // PUT
-const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id)
   const { name, email } = req.body
   try {
@@ -59,7 +59,7 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 // DELETE
-const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id)
   try {
     await User.destroy({ where: {id} })
@@ -71,10 +71,10 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const genToken = (user: User) => {
-  return jwt.sign({ id: user.id }, jwtConfig.secret, { expiresIn: jwtConfig.expiry })
+  return jwt.sign({ sub: user.id }, jwtConfig.secret, { expiresIn: jwtConfig.expiry })
 }
 
-const validateEmail = async (req: any, res: Response, next: NextFunction) => {
+export const validateEmail = async (req: any, res: Response, next: NextFunction) => {
   const data = req.body
   if (!data.email) {
     const err = { status: 400, message: 'Email missing' }
@@ -98,19 +98,19 @@ const validateEmail = async (req: any, res: Response, next: NextFunction) => {
   }
 }
 
-const sendAuthEmail = async (req: any, res: Response, next: NextFunction) => {
+export const sendAuthEmail = async (req: any, res: Response, next: NextFunction) => {
   let user = req.data.user
   let token = genToken(user)
   try {
     await sendOTPViaEmail(user.email, token)
-    res.status(200).json(`Email sent`)
+    res.status(200).json({ id: user.id })
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)
   }
 }
 
-const validateJWT = async (req: any, res: Response, next: NextFunction) => {
+export const validateJWT = async (req: any, res: Response, next: NextFunction) => {
   let data = req.body
   if (data.token) {
     try {
@@ -123,7 +123,7 @@ const validateJWT = async (req: any, res: Response, next: NextFunction) => {
   }
 }
 
-const setCookieWithAuthToken = async (req: any, res: Response, next: NextFunction) => {
+export const setCookieWithAuthToken = async (req: any, res: Response, next: NextFunction) => {
   let data = req.body
   try {
     if (data.token) {
@@ -144,16 +144,4 @@ const setCookieWithAuthToken = async (req: any, res: Response, next: NextFunctio
     const err = { status: error.status || 500, message: error }
     next(err)
   }
-}
-
-module.exports = {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
-  validateEmail,
-  sendAuthEmail,
-  validateJWT,
-  setCookieWithAuthToken,
 }

@@ -36,12 +36,13 @@ describe('route endpoints', () => {
         .post('/users/login')
         .send({ email: 'admin@opengov.com' })
         .expect(200)
-      expect(res.body).toBe('Email sent')
+      expect(res.body['id']).toBe(1)
     })
   })
 
   describe('protected routes', () => {
-    let token = jwt.sign({ id: 1 }, jwtConfig.secret, { expiresIn: jwtConfig.expiry })
+    let userId = 1 as number | any
+    let token = jwt.sign({ sub: userId }, jwtConfig.secret, { expiresIn: jwtConfig.expiry })
 
     describe('users routes', () => {
       // POST users/login/callback
@@ -66,9 +67,12 @@ describe('route endpoints', () => {
         expect(resPost.body['name']).toBe('test')
         expect(resPost.body['email']).toBe('test@user.com')
 
+        let userId = 3 as number | any
+        let token3 = jwt.sign({ sub: userId }, jwtConfig.secret, { expiresIn: jwtConfig.expiry })
+
         let resGet = await request(app)
           .get('/users/3')
-          .set('cookie', 'jwt=' + token)
+          .set('cookie', 'jwt=' + token3)
           .expect(200)
         expect(resGet.body['name']).toBe('test')
         expect(resPost.body['email']).toBe('test@user.com')
@@ -118,9 +122,9 @@ describe('route endpoints', () => {
       })
 
       // PUT users/:id
-      it('should return 200 and update email address and name of user two', async () => {
+      it('should return 200 and update email address and name of user one', async () => {
         let res = await request(app)
-          .put('/users/2')
+          .put('/users/1')
           .set('cookie', 'jwt=' + token)
           .send({
             name: 'admin3',
