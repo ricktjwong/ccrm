@@ -1,9 +1,9 @@
 import express from 'express'
 import passport from 'passport'
 import jwtLogin from '../utils/passport'
-import { getCasesByUserId } from '../queries/cases'
-import { validateUserId } from '../queries/validation'
-import * as dbUsers from '../queries/users'
+import { getCasesByUserId } from '../controllers/cases'
+import { validateUserId } from '../controllers/validation'
+import * as dbUsers from '../controllers/users'
 
 passport.use(jwtLogin)
 let requireAuth = passport.authenticate('jwt', { session: false })
