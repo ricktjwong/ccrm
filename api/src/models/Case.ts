@@ -1,13 +1,13 @@
 import { HasMany, ForeignKey, Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript'
 
-import { ActionPlan } from './ActionPlan'
-import { User } from './User'
-import { Message } from './Message'
-import { Client } from './Client'
-import { Event } from './Event'
+import ActionPlan from './ActionPlan'
+import User from './User'
+import Message from './Message'
+import Client from './Client'
+import Event from './Event'
 
 @Table({tableName: 'cases'})
-export class Case extends Model<Case> {
+export default class Case extends Model<Case> {
   @Column
   caseDesc: string
 

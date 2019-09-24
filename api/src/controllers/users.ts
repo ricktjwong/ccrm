@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { jwtConfig, cookieConfig } from '../config'
-import { User } from '../models/User'
+import { User } from '../models'
 import { sendOTPViaEmail } from '../utils/mailer'
 
 // GET

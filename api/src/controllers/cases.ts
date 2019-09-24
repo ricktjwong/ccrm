@@ -1,9 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { Case } from '../models/Case'
-import { Client } from '../models/Client'
-import { Message } from '../models/Message'
-import { Event } from '../models/Event'
-import { User } from '../models/User'
+import { Case, Client, Message, Event, User } from '../models'
 
 // GET
 export const getCases = async (req: Request, res: Response, next: NextFunction) => {

@@ -1,8 +1,8 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, HasMany, Unique } from 'sequelize-typescript'
-import { Case } from './Case'
+import Case from './Case'
 
 @Table({tableName: 'users'})
-export class User extends Model<User> {
+export default class User extends Model<User> {
   @Column
   name: string
 
