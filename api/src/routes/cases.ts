@@ -1,8 +1,8 @@
 import express from 'express'
 import { checkSchema } from 'express-validator'
-import { getMessagesByCaseId, postMessageToCase, getEventsByCaseId, postEventToCase } from '../queries/timelines'
-import { getCases, getCasesByCaseId } from '../queries/cases'
-import { checkValidationPassed } from '../utils/express'
+import { getMessagesByCaseId, postMessageToCase, getEventsByCaseId, postEventToCase } from '../controllers/timelines'
+import { getCases, getCasesByCaseId } from '../controllers/cases'
+import { checkValidationPassed } from '../controllers/validation'
 
 let router = express.Router()
 
