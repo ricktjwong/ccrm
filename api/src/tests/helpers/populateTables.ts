@@ -1,8 +1,4 @@
-import { User } from '../../models/User'
-import { Case } from '../../models/Case'
-import { Client } from '../../models/Client'
-import { Message } from '../../models/Message'
-import { Event } from '../../models/Event'
+import { Case, Client, Message, Event, User } from '../../models'
 
 let users = require('../fixtures/users.json')
 let clients = require('../fixtures/clients.json')

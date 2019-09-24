@@ -1,5 +1,5 @@
 import { Model, FindOptions, CreateOptions } from 'sequelize'
-import { User } from '../models/User'
+import { User } from '../models'
 
 type SequelizeUser = User
 

@@ -1,4 +1,4 @@
-import { User } from '../models/User'
+import { User } from '../models'
 import { jwtConfig } from '../config'
 const JwtStrategy = require('passport-jwt').Strategy
 
