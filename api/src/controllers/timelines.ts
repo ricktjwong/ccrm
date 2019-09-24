@@ -5,7 +5,7 @@ import { Message } from '../models/Message'
 import { Event } from '../models/Event'
 import { User } from '../models/User'
 
-import { IFindAll, ICreate } from '../utils/types'
+import { IFindAll, ICreate } from '../types'
 
 // GET
 const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>

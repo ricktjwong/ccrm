@@ -10,8 +10,8 @@ export const checkValidationPassed = (req: Request, res: Response, next: NextFun
   }
 }
 
-export const validateUserId = async (req: any, res: Response, next: NextFunction) => {
-  if (parseInt(req.params.id) !== req.user.id) {
+export const validateUserId = async (req: Request, _res: Response, next: NextFunction) => {
+  if (parseInt(req.params.id) !== req.user!.id) {
     const err = { status: 401 }
     next(err)
   } else {
