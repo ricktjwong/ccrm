@@ -50,7 +50,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
       name,
       email,
     }, { where: {id} })
-    const user = await User.findOne({ where: {id} })
+    let user = await User.findOne({ where: {id} })
     res.status(200).json(user)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
