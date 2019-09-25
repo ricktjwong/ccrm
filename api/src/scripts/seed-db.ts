@@ -1,6 +1,6 @@
 /* eslint no-console: 0 */
 import { sequelize } from '../sequelize'
-import { populateTables } from '../tests/helpers/populateTables'
+import { populateTables } from '../tests/helpers/populate-tables'
 
 const ERASE_DB_ON_SYNC = true as boolean
 
