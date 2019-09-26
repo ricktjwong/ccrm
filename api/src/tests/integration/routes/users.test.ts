@@ -1,5 +1,5 @@
 import UserMock from '../../mocks/User'
-import CaseMock from '../../mocks/Cases'
+import CaseMock from '../../mocks/Case'
 import jwt from 'jsonwebtoken'
 import request from 'supertest'
 import { jwtConfig } from '../../../config'
@@ -10,8 +10,8 @@ let app = require('../../../app')
 
 describe('users route endpoints', () => {
   afterEach(() => {
-    UserMock.$clearQueue()
-    CaseMock.$clearQueue()
+    UserMock.$queryInterface.$clearHandlers()
+    CaseMock.$queryInterface.$clearHandlers()
   })
 
   describe('unprotected routes', () => {
@@ -81,12 +81,25 @@ describe('users route endpoints', () => {
 
     // GET users/:id
     it('should return 200 and get one user', async () => {
+      UserMock.$queryInterface.$useHandler(function (query: any, queryOptions: any) {
+        if (query === 'findOne') {
+          if (queryOptions[0].where.id === 1) {
+            return UserMock.build({
+              id: 1,
+              name: 'test',
+              email: 'test@test.com',
+            })
+          } else {
+            return null
+          }
+        }
+      })
       let res = await request(app)
         .get('/users/1')
         .set('cookie', 'jwt=' + token)
         .expect(200)
-      expect(res.body['name']).toBe('admin')
-      expect(res.body['email']).toBe('admin@opengov.com')
+      expect(res.body['name']).toBe('test')
+      expect(res.body['email']).toBe('test@test.com')
     })
 
     // GET users/:id/cases
@@ -96,10 +109,24 @@ describe('users route endpoints', () => {
         .set('cookie', 'jwt=' + token)
         .expect(200)
       expect(res.body.length).toBe(1)
+      expect(res.body[0]['caseDesc']).toBe('Single family, requires education grant for son')
     })
 
     // PUT users/:id
     it('should return 200 and update email address and name of user one', async () => {
+      UserMock.$queryInterface.$useHandler(function (query: any, queryOptions: any) {
+        if (query === 'findOne') {
+          if (queryOptions[0].where.id === 1) {
+            return UserMock.build({
+              id: 1,
+              name: 'admin3',
+              email: 'admin3@opengov.com',
+            })
+          } else {
+            return null
+          }
+        }
+      })
       let res = await request(app)
         .put('/users/1')
         .set('cookie', 'jwt=' + token)
@@ -109,7 +136,8 @@ describe('users route endpoints', () => {
         })
         .expect(200)
       let user = res.body
-      expect(user['name']).toBe('admin')
+      expect(user['name']).toBe('admin3')
+      expect(user['email']).toBe('admin3@opengov.com')
     })
   })
 })

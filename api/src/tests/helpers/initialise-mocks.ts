@@ -1,5 +1,7 @@
 import UserMock from '../mocks/User'
-import CaseMock from '../mocks/Cases'
+import CaseMock from '../mocks/Case'
+import MessageMock from '../mocks/Message'
+import EventMock from '../mocks/Event'
 
 export const initialiseMocks = () => {
   jest.mock('../../models/User', () => {
@@ -13,6 +15,20 @@ export const initialiseMocks = () => {
     return {
       _esModule: true,
       default: CaseMock,
+    }
+  })
+
+  jest.mock('../../models/Message', () => {
+    return {
+      _esModule: true,
+      default: MessageMock,
+    }
+  })
+
+  jest.mock('../../models/Event', () => {
+    return {
+      _esModule: true,
+      default: EventMock,
     }
   })
 }
