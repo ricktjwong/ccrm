@@ -36,6 +36,15 @@ describe('users route endpoints', () => {
       expect(res.body.length).toBe(1)
     })
 
+    // GET cases/:id
+    it('should return 200 and get one case', async () => {
+      let res = await request(app)
+        .get('/cases/1')
+        .set('cookie', 'jwt=' + token)
+        .expect(200)
+      expect(res.body['caseDesc']).toBe('Single family, requires education grant for son')
+    })
+
     // GET cases/:id/messages
     it('should return 200 and get two messages', async () => {
       let res = await request(app)
