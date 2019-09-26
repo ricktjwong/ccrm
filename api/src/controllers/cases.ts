@@ -19,6 +19,7 @@ export const getCasesByUserId = async (req: any, res: Response, next: NextFuncti
       where: { userId },
       include: [ Client, User ],
     })
+
     res.status(200).json(cases)
   } catch (error) {
     const err = { status: error.status || 500, message: error }

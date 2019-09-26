@@ -1,5 +1,5 @@
 import UserMock from '../../mocks/User'
-import CaseMock from '../../mocks/Cases'
+import CaseMock from '../../mocks/Case'
 import jwt from 'jsonwebtoken'
 import request from 'supertest'
 import { jwtConfig } from '../../../config'
