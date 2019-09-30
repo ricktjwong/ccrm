@@ -139,5 +139,12 @@ describe('users route endpoints', () => {
       expect(user['name']).toBe('admin3')
       expect(user['email']).toBe('admin3@opengov.com')
     })
+
+    it('should return 200 after getting pending cases', async () => {
+      await request(app)
+        .get('/users/1/cases/pending')
+        .set('cookie', 'jwt=' + token)
+        .expect(200)
+    })
   })
 })

@@ -27,6 +27,29 @@ export const getCasesByUserId = async (req: any, res: Response, next: NextFuncti
   }
 }
 
+export const getPendingCases = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cases = await Case.findAll({
+      include: [
+        {
+          model: Event,
+          where: {
+            details: {
+              userTo: 1,
+            },
+          },
+        },
+        Client,
+        User,
+      ],
+    })
+    res.status(200).json(cases)
+  } catch (error) {
+    const err = { status: error.status || 500, message: error }
+    next(err)
+  }
+}
+
 export const getCasesByCaseId = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id)
   try {
@@ -58,6 +81,23 @@ export const getCasesByCaseId = async (req: Request, res: Response, next: NextFu
     })
 
     res.status(200).json(thisCase)
+  } catch (error) {
+    const err = { status: error.status || 500, message: error }
+    next(err)
+  }
+}
+
+export const updateCaseWithNewUser = async (req: Request, res: Response, next: NextFunction) => {
+  const caseId = parseInt(req.params.id)
+  const user: any = req.user!
+  const userId = Number(user.id)
+  const { details } = req.body
+  try {
+    await Case.update({
+      userId,
+    }, { where: { id: caseId } })
+    req.body = { subject: 'Transfer', details }
+    next()
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)

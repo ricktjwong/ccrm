@@ -1,4 +1,4 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo, ForeignKey } from 'sequelize-typescript'
+import { Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo, ForeignKey, DataType } from 'sequelize-typescript'
 import Case from './Case'
 import User from './User'
 
@@ -13,8 +13,8 @@ export default class Event extends Model<Event> {
   @BelongsTo(() => User)
   user: User
 
-  @Column
-  details: string
+  @Column(DataType.JSON)
+  details: any
 
   @CreatedAt
   @Column

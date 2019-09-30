@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript'
 import { dbConfig } from './config'
-import path from 'path'
+
+import * as models from './models'
 
 export const sequelize = new Sequelize(
   dbConfig.database,
@@ -10,6 +11,6 @@ export const sequelize = new Sequelize(
     dialect: 'postgres',
     port: parseInt(dbConfig.port, 10),
     host: dbConfig.host,
-    models: [path.join(__dirname, '/models')],
+    models: Object.values(models),
     logging: dbConfig.logging,
   })
