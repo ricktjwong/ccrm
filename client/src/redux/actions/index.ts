@@ -86,9 +86,9 @@ export const acceptPendingCase = (caseId: number, details: any) => async (dispat
         details: details,
       }),
     })
-    let updatedCase: Case = await response.json()
+    let data = await response.json()
     if (response.status === 201) {
-      dispatch({ type: API_OK, payload: { updatedCase } })
+      dispatch({ type: API_OK, payload: data })
     } else {
       dispatch({ type: AUTH_OK, payload: false })
     }

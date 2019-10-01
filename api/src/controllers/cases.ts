@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Case, Client, Message, Event, User } from '../models'
+import { sequelize } from '../sequelize'
 
 // GET
 export const getCases = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,6 +29,8 @@ export const getCasesByUserId = async (req: any, res: Response, next: NextFuncti
 }
 
 export const getPendingCases = async (req: Request, res: Response, next: NextFunction) => {
+  const user: any = req.user!
+  const userId = Number(user.id)
   try {
     const cases = await Case.findAll({
       include: [
@@ -35,7 +38,7 @@ export const getPendingCases = async (req: Request, res: Response, next: NextFun
           model: Event,
           where: {
             details: {
-              userTo: 1,
+              userTo: userId,
             },
           },
         },
@@ -87,18 +90,27 @@ export const getCasesByCaseId = async (req: Request, res: Response, next: NextFu
   }
 }
 
-export const updateCaseWithNewUser = async (req: Request, res: Response, next: NextFunction) => {
+export const updateCaseWithUserAndCreateEvent = async (req: Request, res: Response, next: NextFunction) => {
   const caseId = parseInt(req.params.id)
   const user: any = req.user!
   const userId = Number(user.id)
   const { details } = req.body
+  const payload = { subject: 'Transfer', details }
+  let transaction
   try {
-    await Case.update({
-      userId,
-    }, { where: { id: caseId } })
-    req.body = { subject: 'Transfer', details }
-    next()
+    transaction = await sequelize.transaction()
+    await Case.update(
+      { userId },
+      { where: { id: caseId }, transaction }
+    )
+    await Event.create(
+      { ...payload, userId, caseId },
+      { transaction }
+    )
+    await transaction.commit()
+    res.status(200).json('Transaction complete')
   } catch (error) {
+    if (transaction) await transaction.rollback()
     const err = { status: error.status || 500, message: error }
     next(err)
   }
