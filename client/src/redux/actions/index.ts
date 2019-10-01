@@ -1,6 +1,7 @@
 import { AUTH_OK, AUTH_FORBIDDEN, AUTH_ERROR, API_OK, USER_LOGOUT, USER_OK } from './types'
 import { Dispatch } from 'redux'
 import { store } from '../store'
+import { Case } from 'models/Case'
 
 export const logout = () => {
   return {
@@ -15,9 +16,9 @@ export const getCases = () => async (dispatch: Dispatch) => {
       method: 'GET',
       credentials: 'include',
     })
-    let data = await response.json()
+    let cases = await response.json()
     if (response.status === 200) {
-      dispatch({ type: API_OK, payload: data })
+      dispatch({ type: API_OK, payload: { cases } })
     } else {
       dispatch({ type: AUTH_OK, payload: false })
     }
@@ -48,6 +49,72 @@ export const validateEmailAndSendAuthToken = (props: any) => async (dispatch: Di
     }
   } catch (error) {
     dispatch({ type: AUTH_ERROR, payload: 'Error with server' })
+  }
+}
+
+export const getPendingCases = () => async (dispatch: Dispatch) => {
+  try {
+    let id = store.getState().user.userId
+    let response = await fetch(process.env.REACT_APP_API_URL + `/users/${id}/cases/pending`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+    let pendingCases: Case[] = await response.json()
+    if (response.status === 200) {
+      dispatch({ type: API_OK, payload: { pendingCases } })
+    } else {
+      dispatch({ type: AUTH_OK, payload: false })
+    }
+  } catch (error) {
+    dispatch({ type: AUTH_OK, payload: false })
+  }
+}
+
+export const acceptPendingCase = (caseId: number, details: any) => async (dispatch: Dispatch) => {
+  try {
+    let response = await fetch(process.env.REACT_APP_API_URL + `/cases/${caseId}/transfer/accept`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        details: details,
+      }),
+    })
+    let data = await response.json()
+    if (response.status === 200) {
+      dispatch({ type: API_OK, payload: data })
+    } else {
+      dispatch({ type: AUTH_OK, payload: false })
+    }
+  } catch (error) {
+    dispatch({ type: AUTH_OK, payload: false })
+  }
+}
+
+export const transferCaseToUser = (caseId: number, details: any) => async (dispatch: Dispatch) => {
+  try {
+    let response = await fetch(process.env.REACT_APP_API_URL + `/cases/${caseId}/transfer`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        details: details,
+      }),
+    })
+    let postedEvent: Case = await response.json()
+    if (response.status === 200) {
+      dispatch({ type: API_OK, payload: { postedEvent } })
+    } else {
+      dispatch({ type: AUTH_OK, payload: false })
+    }
+  } catch (error) {
+    dispatch({ type: AUTH_OK, payload: false })
   }
 }
 

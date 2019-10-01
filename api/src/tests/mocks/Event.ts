@@ -1,5 +1,4 @@
-let SequelizeMock = require('sequelize-mock')
-let DBConnectionMock = new SequelizeMock()
+import DBConnectionMock from './Sequelize'
 
 let EventMock = DBConnectionMock.define('events', {
   subject: 'Test event',

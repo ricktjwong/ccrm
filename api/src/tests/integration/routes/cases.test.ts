@@ -1,7 +1,8 @@
 import UserMock from '../../mocks/User'
-import CaseMock from '../../mocks/Case'
+import SequelizeMock from '../../mocks/Sequelize'
 import jwt from 'jsonwebtoken'
 import request from 'supertest'
+import sinon from 'sinon'
 import { jwtConfig } from '../../../config'
 import { initialiseMocks } from '../../helpers/initialise-mocks'
 
@@ -11,7 +12,6 @@ let app = require('../../../app')
 describe('users route endpoints', () => {
   afterEach(() => {
     UserMock.$queryInterface.$clearHandlers()
-    CaseMock.$queryInterface.$clearHandlers()
   })
 
   describe('unprotected routes', () => {
@@ -87,6 +87,41 @@ describe('users route endpoints', () => {
         .expect(201)
       expect(resPost.body['subject']).toBe('Test subject')
       expect(resPost.body['details']).toBe('Test details')
+    })
+
+    // POST cases/:id/transfer
+    it('should return 201 after creating a new transfer event', async () => {
+      let resPost = await request(app)
+        .post('/cases/1/transfer')
+        .set('cookie', 'jwt=' + token)
+        .send({
+          subject: 'Transfer',
+          details: {
+            userFrom: 1,
+            userTo: 2,
+          },
+        })
+        .expect(201)
+      expect(resPost.body['subject']).toBe('Transfer')
+      expect(resPost.body['details']['userTo']).toBe(2)
+    })
+
+    it('should return 200 after updating a case with new user', async () => {
+      class TransactionClass {
+        public rollback () {
+          return 'rolled back'
+        }
+        public commit () {
+          return 'commited'
+        }
+      }
+      let transactionClass = new TransactionClass()
+      sinon.stub(SequelizeMock, 'transaction').returns(transactionClass)
+      let res = await request(app)
+        .put('/cases/1/transfer/accept')
+        .set('cookie', 'jwt=' + token)
+        .expect(200)
+      expect(res.body).toBe('Transaction complete')
     })
   })
 })

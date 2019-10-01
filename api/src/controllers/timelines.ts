@@ -10,7 +10,7 @@ const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { from = 0, to = Date.now(), limit = 20 } = req.query
-      const caseId = Number(req.params.caseId)
+      const caseId = Number(req.params.id)
       const items = await MType.findAll({
         where: {
           caseId,
@@ -38,7 +38,7 @@ const getTimelineItemsByCaseId = <T extends Model<T>>(MType: IFindAll<T>) =>
 const postTimelineItemToCase = <T extends Model<T>>(MType: ICreate<T>) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const caseId = Number(req.params.caseId)
+      const caseId = Number(req.params.id)
       const user: any = req.user!
       const userId = Number(user.id)
       const payload = req.body

@@ -20,11 +20,31 @@
           "subject": "Referral",
           "userId": 1,
           "details": "Case has been referred to SSO"
+        },
+        {
+          "subject": "Transfer",
+          "userId": 1,
+          "details": {
+            "userFrom": 2,
+            "userTo": 1,
+            "status": "Pending"
+          },
+          "createdAt": "2019-09-29T18:25:43.511Z"
+        },
+        {
+          "subject": "Transfer",
+          "userId": 1,
+          "details": {
+            "userFrom": 2,
+            "userTo": 1,
+            "status": "Accepted"
+          },
+          "createdAt": "2019-09-30T18:25:43.511Z"
         }
       ]
   },
   {
-    "userId": 1,
+    "userId": 2,
     "caseDesc": "Single family, requires HDB loan for family",
     "clientId": 1,
     "messages": 
@@ -44,6 +64,26 @@
           "subject": "Referral",
           "userId": 1,
           "details": "Case has been referred to SSO"
+        },
+        {
+          "subject": "Transfer",
+          "userId": 1,
+          "details": {
+            "userFrom": 2,
+            "userTo": 1,
+            "status": "Accepted"
+          },
+          "createdAt": "2019-09-29T18:25:43.511Z"
+        },
+        {
+          "subject": "Transfer",
+          "userId": 1,
+          "details": {
+            "userFrom": 2,
+            "userTo": 1,
+            "status": "Pending"
+          },
+          "createdAt": "2019-09-30T18:25:43.511Z"
         }
       ]
   }

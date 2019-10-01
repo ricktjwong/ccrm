@@ -1,7 +1,7 @@
 import { User } from './User'
 
 export interface Event {
-  details: string
+  details: any
   user: User
   userId: number
   id: number

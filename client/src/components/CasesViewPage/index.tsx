@@ -9,6 +9,8 @@ import './casesview.css'
 
 interface Props extends RouteComponentProps {
   getCases: () => Promise<any>
+  getPendingCases: () => Promise<any>
+  acceptPendingCase: (caseId: number, details: any) => Promise<any>
   listItems: string[]
   authenticated: boolean
   data: any
@@ -16,6 +18,13 @@ interface Props extends RouteComponentProps {
 
 interface CasesViewState {
   cases: Case[]
+  pendingCases: Case[]
+  caseId: number
+  details: {
+    userFrom: number
+    userTo: number
+    status: string
+  }
 }
 
 class CasesViewPage extends Component<Props, CasesViewState> {
@@ -24,6 +33,13 @@ class CasesViewPage extends Component<Props, CasesViewState> {
 
     this.state = {
       cases: [],
+      pendingCases: [],
+      caseId: 0,
+      details: {
+        userFrom: 0,
+        userTo: 0,
+        status: '',
+      },
     }
 
     this.viewCase = this.viewCase.bind(this)
@@ -32,8 +48,20 @@ class CasesViewPage extends Component<Props, CasesViewState> {
   async callAPI () {
     await this.props.getCases()
     if (this.props.authenticated) {
-      let cases = this.props.data
+      let cases = this.props.data.cases
       this.setState({ cases })
+    }
+    await this.props.getPendingCases()
+    if (this.props.authenticated) {
+      let pendingCases = this.props.data.pendingCases
+      this.setState({ pendingCases })
+    }
+  }
+
+  async acceptCase (caseId: number, details: any) {
+    await this.props.acceptPendingCase(caseId, details)
+    if (this.props.authenticated) {
+      this.callAPI()
     }
   }
 
@@ -45,7 +73,7 @@ class CasesViewPage extends Component<Props, CasesViewState> {
   viewCase (caseId: number) {
     this.props.history.push({
       pathname: '/case',
-      state: { caseId: caseId },
+      state: { caseId },
     })
   }
 
@@ -57,6 +85,13 @@ class CasesViewPage extends Component<Props, CasesViewState> {
       </li>
     )
 
+    let pendingItems = this.state.pendingCases.map((d: Case) =>
+      <li key={d.id}> {d.client.name} | {d.caseDesc} |
+        {d.user.agency} - {d.user.email} | {d.createdAt} |
+        <button onClick={() => this.acceptCase(d.id, d.events[0].details)}>Accept Case</button>
+      </li>
+    )
+
     return (
       <div className="cases">
         <Topbar />
@@ -64,6 +99,8 @@ class CasesViewPage extends Component<Props, CasesViewState> {
         <div className="case-content">
           Cases:
           <p>{ listItems }</p>
+          Pending Cases:
+          <p>{ pendingItems }</p>
         </div>
       </div>
     )
