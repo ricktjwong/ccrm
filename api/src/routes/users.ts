@@ -11,9 +11,9 @@ let router = express.Router()
 
 router.get('/', requireAuth, dbUsers.getUsers)
 
-router.get('/:id', requireAuth, validateUserId, dbUsers.getUserById)
-
 router.post('/', requireAuth, dbUsers.createUser)
+
+router.get('/:id', requireAuth, validateUserId, dbUsers.getUserById)
 
 router.put('/:id', requireAuth, validateUserId, dbUsers.updateUser)
 

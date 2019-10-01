@@ -28,6 +28,9 @@ export const getCasesByUserId = async (req: any, res: Response, next: NextFuncti
   }
 }
 
+// This sequelize query gets all cases containing events with subject `Transfer` where userTo matches
+// the current userId making the query. We then filter the cases to only get `Pending` cases, removing the
+// cases where details.status is `Accept`
 export const getPendingCases = async (req: Request, res: Response, next: NextFunction) => {
   const user: any = req.user!
   const userId = Number(user.id)
@@ -46,7 +49,10 @@ export const getPendingCases = async (req: Request, res: Response, next: NextFun
         User,
       ],
     })
-    res.status(200).json(cases)
+    const pendingCases = cases.filter((thisCase: Case) =>
+      thisCase.events[thisCase.events.length - 1].details.status === 'Pending'
+    )
+    res.status(200).json(pendingCases)
   } catch (error) {
     const err = { status: error.status || 500, message: error }
     next(err)

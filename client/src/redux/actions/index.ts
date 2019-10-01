@@ -59,10 +59,7 @@ export const getPendingCases = () => async (dispatch: Dispatch) => {
       method: 'GET',
       credentials: 'include',
     })
-    let cases: Case[] = await response.json()
-    let pendingCases = cases.filter((thisCase: Case) =>
-      thisCase.events[thisCase.events.length - 1].details.status === 'Pending'
-    )
+    let pendingCases: Case[] = await response.json()
     if (response.status === 200) {
       dispatch({ type: API_OK, payload: { pendingCases } })
     } else {
@@ -87,7 +84,7 @@ export const acceptPendingCase = (caseId: number, details: any) => async (dispat
       }),
     })
     let data = await response.json()
-    if (response.status === 201) {
+    if (response.status === 200) {
       dispatch({ type: API_OK, payload: data })
     } else {
       dispatch({ type: AUTH_OK, payload: false })
