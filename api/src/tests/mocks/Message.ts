@@ -1,5 +1,4 @@
-let SequelizeMock = require('sequelize-mock')
-let DBConnectionMock = new SequelizeMock()
+import DBConnectionMock from './Sequelize'
 
 let MessageMock = DBConnectionMock.define('messages', {
   text: 'Test message',

@@ -1,5 +1,4 @@
-let SequelizeMock = require('sequelize-mock')
-let DBConnectionMock = new SequelizeMock()
+import DBConnectionMock from './Sequelize'
 let cases = require('../fixtures/cases.json')
 
 let CaseMock = DBConnectionMock.define('cases', cases[0])
