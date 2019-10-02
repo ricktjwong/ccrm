@@ -26,14 +26,14 @@ class CreateUserPage extends Component<Props, State> {
   }
 
   callAPI () {
-    fetch('http://localhost:9000/users')
+    fetch(process.env.REACT_APP_API_URL + '/users')
       .then(res => res.text())
       .then(res => this.setState({ apiResponse: res }))
       .catch(err => err)
   }
 
   createUser () {
-    fetch('http://localhost:9000/users', {
+    fetch(process.env.REACT_APP_API_URL + '/users', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

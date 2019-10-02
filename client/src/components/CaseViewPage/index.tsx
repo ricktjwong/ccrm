@@ -24,7 +24,7 @@ class CaseViewPage extends Component<Props, State> {
   }
 
   callAPI () {
-    fetch('http://localhost:9000/cases/' + this.state.caseId, {
+    fetch(process.env.REACT_APP_API_URL + '/cases/' + this.state.caseId, {
       method: 'GET',
       credentials: 'include',
     })
