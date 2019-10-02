@@ -120,8 +120,9 @@ export const createCase = (props: any) => async (dispatch: Dispatch) => {
   }
 }
 
-export const transferCaseToUser = (caseId: number, details: any) => async (dispatch: Dispatch) => {
+export const transferCaseToUser = (caseId: number, userTo: number) => async (dispatch: Dispatch) => {
   try {
+    const userFrom = store.getState().user.userId
     let response = await fetch(process.env.REACT_APP_API_URL + `/cases/${caseId}/transfer`, {
       method: 'POST',
       credentials: 'include',
@@ -130,11 +131,12 @@ export const transferCaseToUser = (caseId: number, details: any) => async (dispa
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        details: details,
+        subject: 'Transfer',
+        details: { userFrom, userTo, status: 'Pending' },
       }),
     })
     let postedEvent: Case = await response.json()
-    if (response.status === 200) {
+    if (response.status === 201) {
       dispatch({ type: API_OK, payload: { postedEvent } })
     } else {
       dispatch({ type: AUTH_OK, payload: false })

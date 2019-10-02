@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
-import { Sidebar } from 'components/Sidebar'
 import { RouteComponentProps } from 'react-router'
+import { connect } from 'react-redux'
+
+import { Sidebar } from 'components/Sidebar'
 import { Case } from 'models/Case'
 import { Message } from 'models/Message'
 import Topbar from 'components/Topbar'
+
+import * as actions from '../../redux/actions'
 import './caseview.css'
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps {
+  transferCaseToUser: (caseId: number, details: any) => Promise<any>,
+  authenticated: boolean
+}
 
 interface State {
   case?: Case
+  userTo: string
   caseId: number
 }
 
@@ -19,11 +27,28 @@ class CaseViewPage extends Component<Props, State> {
 
     this.state = {
       case: undefined, // case id known, but yet to retrieve case
+      userTo: '',
       caseId: this.props.location.state.caseId,
+    }
+
+    this.setUserTo = this.setUserTo.bind(this)
+  }
+
+  setUserTo (event: any) {
+    this.setState({ userTo: event.target.value })
+  }
+
+  async transferCase () {
+    const userTo = Number(this.state.userTo)
+    if (userTo) {
+      await this.props.transferCaseToUser(this.state.caseId, userTo)
+      if (this.props.authenticated) {
+        this.fetchCaseInformation()
+      }
     }
   }
 
-  callAPI () {
+  fetchCaseInformation () {
     fetch(process.env.REACT_APP_API_URL + '/cases/' + this.state.caseId, {
       method: 'GET',
       credentials: 'include',
@@ -34,7 +59,7 @@ class CaseViewPage extends Component<Props, State> {
   }
 
   componentDidMount () {
-    this.callAPI()
+    this.fetchCaseInformation()
     document.title = 'Case View'
   }
 
@@ -62,6 +87,10 @@ class CaseViewPage extends Component<Props, State> {
       <div className="caseview">
         <Topbar />
         <Sidebar />
+        <div className="transfer">
+          Transfer to: <input value={this.state.userTo} onChange={this.setUserTo} />
+          <button onClick={() => this.transferCase()}>Transfer</button>
+        </div>
         <div className="content">
           Case:
           <p>{ caseDetails }</p>
@@ -75,4 +104,10 @@ class CaseViewPage extends Component<Props, State> {
   }
 }
 
-export default CaseViewPage
+function mapStateToProps (state: any) {
+  return {
+    authenticated: state.auth.authenticated,
+  }
+}
+
+export default connect(mapStateToProps, actions)(CaseViewPage)

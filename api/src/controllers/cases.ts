@@ -128,7 +128,7 @@ export const updateCaseWithUserAndCreateEvent = async (req: Request, res: Respon
   const user: any = req.user!
   const userId = Number(user.id)
   const { details } = req.body
-  const payload = { subject: 'Transfer', details }
+  const payload = { subject: 'Transfer', details: { ...details, status: 'Accepted' } }
   let transaction
   try {
     transaction = await sequelize.transaction()
