@@ -5,5 +5,8 @@ before_script:
   - cd api && npm install && cd ..
   - cd client && npm install && cd ..
 script:
-  - cd api && npm run lint && cd ..
-  - cd client && npm run lint && cd ..
+  - cd api && npm run lint 
+  - npm test
+  - cd ..
+  - cd client && npm run lint 
+  - cd ..
