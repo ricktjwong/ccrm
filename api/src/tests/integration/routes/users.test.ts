@@ -1,7 +1,9 @@
 import UserMock from '../../mocks/User'
 import CaseMock from '../../mocks/Case'
+import SequelizeMock from '../../mocks/Sequelize'
 import jwt from 'jsonwebtoken'
 import request from 'supertest'
+import sinon from 'sinon'
 import { jwtConfig } from '../../../config'
 import { initialiseMocks } from '../../helpers/initialise-mocks'
 
@@ -110,6 +112,30 @@ describe('users route endpoints', () => {
         .expect(200)
       expect(res.body.length).toBe(1)
       expect(res.body[0]['caseDesc']).toBe('Single family, requires education grant for son')
+    })
+
+    // POST users/:id/cases
+    it('should return 201 after creating a case', async () => {
+      class TransactionClass {
+        public rollback () {
+          return 'rolled back'
+        }
+        public commit () {
+          return 'commited'
+        }
+      }
+      let transactionClass = new TransactionClass()
+      sinon.stub(SequelizeMock, 'transaction').returns(transactionClass)
+      let res = await request(app)
+        .post('/users/1/cases')
+        .set('cookie', 'jwt=' + token)
+        .send({
+          caseDesc: 'test case',
+          collaborators: [],
+          clientId: 4,
+        })
+        .expect(201)
+      expect(res.body).toBe('Case transaction complete')
     })
 
     // PUT users/:id
