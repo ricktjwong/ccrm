@@ -41,6 +41,13 @@ code {
 #bar-text {
   padding: 25px 0 20px 80px;
   font-size: 120%;
+  flex: 0 0 65%;
+}
+
+#right {
+  padding: 25px 10px 0px 0px;
+  text-align: right;
+  flex: 1;
 }
 
 .topbar {
@@ -50,6 +57,7 @@ code {
   box-shadow: inset 0 -1px 0 0 #E2E2EA;
   border-bottom: 1px grey solid;
   text-align: left;
+  display: flex;
 }
 
 #icon {
