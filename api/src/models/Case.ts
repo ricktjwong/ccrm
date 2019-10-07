@@ -1,4 +1,4 @@
-import { HasMany, ForeignKey, Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript'
+import { HasMany, ForeignKey, Model, Column, Table, CreatedAt, UpdatedAt, BelongsTo, DataType } from 'sequelize-typescript'
 
 import ActionPlan from './ActionPlan'
 import User from './User'
@@ -10,6 +10,9 @@ import Event from './Event'
 export default class Case extends Model<Case> {
   @Column
   caseDesc: string
+
+  @Column(DataType.ARRAY(DataType.INTEGER))
+  collaborators: number[]
 
   @CreatedAt
   @Column

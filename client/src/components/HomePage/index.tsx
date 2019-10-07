@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Sidebar } from 'components/Sidebar'
-import { Topbar } from 'components/Topbar'
 import { RouteComponentProps } from 'react-router'
 import { connect } from 'react-redux'
+import Topbar from 'components/Topbar'
 import * as actions from '../../redux/actions'
 import './home.css'
 

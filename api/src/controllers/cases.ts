@@ -96,6 +96,33 @@ export const getCasesByCaseId = async (req: Request, res: Response, next: NextFu
   }
 }
 
+export const createCase = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = Number(req.params.id)
+  const data = req.body
+  const payload = { subject: 'Created', details: { userId } }
+  data.collaborators = [userId]
+  let transaction
+  try {
+    transaction = await sequelize.transaction()
+    const thisCase: Case = await Case.create({
+      caseDesc: data.caseDesc,
+      clientId: data.clientId,
+      collaborators: data.collaborators,
+      userId,
+    })
+    await Event.create(
+      { ...payload, userId, caseId: thisCase.id },
+      { transaction }
+    )
+    await transaction.commit()
+    res.status(201).json('Case transaction complete')
+  } catch (error) {
+    if (transaction) await transaction.rollback()
+    const err = { status: error.status || 500, message: error }
+    next(err)
+  }
+}
+
 export const updateCaseWithUserAndCreateEvent = async (req: Request, res: Response, next: NextFunction) => {
   const caseId = parseInt(req.params.id)
   const user: any = req.user!

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Sidebar } from 'components/Sidebar'
-import { Topbar } from 'components/Topbar'
 import { RouteComponentProps } from 'react-router'
 import { Case } from 'models/Case'
 import { Message } from 'models/Message'
+import Topbar from 'components/Topbar'
 import './caseview.css'
 
 interface Props extends RouteComponentProps {}

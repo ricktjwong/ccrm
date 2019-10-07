@@ -94,6 +94,32 @@ export const acceptPendingCase = (caseId: number, details: any) => async (dispat
   }
 }
 
+export const createCase = (props: any) => async (dispatch: Dispatch) => {
+  try {
+    let id = store.getState().user.userId
+    let response = await fetch(process.env.REACT_APP_API_URL + `/users/${id}/cases`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        caseDesc: props.caseDesc,
+        clientId: props.clientId,
+      }),
+    })
+    let data = await response.json()
+    if (response.status === 201) {
+      dispatch({ type: API_OK, payload: data })
+    } else {
+      dispatch({ type: AUTH_OK, payload: false })
+    }
+  } catch (error) {
+    dispatch({ type: AUTH_OK, payload: false })
+  }
+}
+
 export const transferCaseToUser = (caseId: number, details: any) => async (dispatch: Dispatch) => {
   try {
     let response = await fetch(process.env.REACT_APP_API_URL + `/cases/${caseId}/transfer`, {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { Topbar } from 'components/Topbar'
 import { Sidebar } from 'components/Sidebar'
 import { Case } from 'models/Case'
 import { connect } from 'react-redux'
+import Topbar from 'components/Topbar'
 import * as actions from '../../redux/actions'
 import './casesview.css'
 
