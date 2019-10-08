@@ -123,6 +123,14 @@ export const createCase = async (req: Request, res: Response, next: NextFunction
   }
 }
 
+export const enforceCaseTransfer = async (req: Request, res: Response, next: NextFunction) => {
+  const userFrom = req.user!.id
+  req.body.subject = 'Transfer'
+  req.body.details.userFrom = userFrom
+  req.body.details.status = 'Pending'
+  next()
+}
+
 export const updateCaseWithUserAndCreateEvent = async (req: Request, res: Response, next: NextFunction) => {
   const caseId = parseInt(req.params.id)
   const user: any = req.user!
